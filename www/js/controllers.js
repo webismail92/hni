@@ -43,7 +43,7 @@ angular.module('starter.controllers', [])
     };
   })
 
-  .controller('registerCtrl', function ($scope,$http) {
+  .controller('registerCtrl', function ($scope, $http, MyServices) {
     //console.log($scope.myform.username);
     $scope.retailer = {};
     $scope.retailer.username = "";
@@ -54,27 +54,41 @@ angular.module('starter.controllers', [])
     $scope.retailer.pan = "";
     $scope.retailer.shopname = "";
     $scope.retailer.contact = "";
-    $scope.register=function(){
-if($scope.retailer.c_password ==$scope.retailer.password)
-$scope.retailer.c_password="";
-$scope.retailer.password="";
-
+    $scope.passwordnotmatch = false;
+    $scope.register = function () {
+      console.log("registered function called !");
+      if ($scope.retailer.c_password != $scope.retailer.password) {
+        $scope.retailer.c_password = "";
+        $scope.retailer.password = "";
+        $scope.passwordnotmatch = true;
+        console.log("password do not match");
+      }
+      else
+      {
+        var status=MyServices.insertUser($scope.retailer);
+        console.log(status);
+      }
     }
   })
 
-  .controller('loginCtrl', function ($scope) {
+  .controller('loginCtrl', function ($scope,MyServices) {
     $scope.retailer = {};
     $scope.retailer.email = "";
     $scope.retailer.password = "";
+    $scope.doLogin=function(){
+    
+      var status=MyServices.doLogin($scope.retailer);
+      console.log(status);
+    }
   })
 
-  .controller('productCtrl',function($scope, $state,$location,$window){
-      $scope.proToProDetail = function(){
-        console.log('called');
-        $window.location.href = "#/app/login";
-      
-    
-      }
+  .controller('productCtrl', function ($scope, $location) {
+    $scope.proToProDetail = function () {
+      console.log('called');
+      $location.path("app/product-detail");
+
+
+    }
   })
 
   .controller('PlaylistCtrl', function ($scope, $stateParams) { });

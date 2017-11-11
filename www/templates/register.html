@@ -10,13 +10,15 @@
       <form name="myform" class="col s12">
         <div class="row">
           <div class="input-field col s6">
-            <input id="name" type="text" ng-model="reatailer.username" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters">
+            <input name="username" id="name" type="text" ng-model="reatailer.username" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters">
             <label for="name" data-error="wrong" data-success="right">Full Name</label>
+
           </div>
           <div class="input-field col s6">
-            <input id="email" ng-model="retailer.email" type="email" class="validate" required="">
+            <input id="email" name="emailaddress" ng-model="retailer.email" type="email" class="validate" required="">
             <label for="email" data-error="Invalid address" data-success="right">Email</label>
-            <span ng-show="!retailer.email.$error.email">{{retailer.email.$error.email}}</span>
+            <!-- <span ng-if=myform.emailaddress.$error.email >Invalid Email address</span> -->
+            <!-- <span ng-if=myform.emailaddress.$error.required >Email is required</span> -->
           </div>
         </div>
         <div class="row">
@@ -25,8 +27,9 @@
             <label for="password" data-error="wrong" data-success="right">Password</label>
           </div>
           <div class="input-field col s6">
-            <input id="c_password" type="password" ng-model="retailer.c_password" class="validate" required="">
+            <input id="c_password" type="password" ng-change=passwordnotmatch=false ng-model="retailer.c_password" class="validate" required="">
             <label for="c_password" data-error="wrong" data-success="right">Confirm Password</label>
+            <span ng-if=passwordnotmatch >password do not match</span>
           </div>
         </div>
         <div class="row">
@@ -51,7 +54,7 @@
         </div>
         <div class="row">
           <div class="input-field col s12 text-center">
-            <button class="btn-large waves-effect waves-light red lighten-1" ng-click="registerUser()">Register
+            <button class="btn-large waves-effect waves-light red lighten-1" ng-click="register()">Register
               <!-- <i class="material-icons right">send</i> -->
             </button>
           </div>
