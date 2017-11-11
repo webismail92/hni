@@ -1,0 +1,33 @@
+<ion-view>
+  <ion-header-bar>
+    <h1 class="title">Login</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeLogin()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <div class="row">
+      <form ng-submit="doLogin()" class="col s12">
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="email" type="text" class="validate" required="">
+            <label for="email" data-error="wrong" data-success="right">User Name</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="password" type="password" class="validate" required="">
+            <label for="password" data-error="wrong" data-success="right">Password</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12 text-center">
+            <button class="btn-large waves-effect waves-light red lighten-1" type="submit" name="action">Login
+              <!-- <i class="material-icons right">send</i> -->
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ion-content>
+</ion-view>
