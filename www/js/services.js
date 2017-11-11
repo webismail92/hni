@@ -3,22 +3,24 @@ var adminurl = "my url";
 var myservices = angular.module('myservices', [])
 
 
-    .factory('MyServices', function ($http, $location,$httpParamSerializerJQLike ) {
+    .factory('MyServices', function ($http, $location,) {
 
 
 
 
         return {
             insertUser: function (retailerdata) {
-                console.log("in insertuser function ! ");
+                console.log(retailerdata);
                 return $http({
                     url: 'http://localhost:8000/api/retailer/register',
                     method: 'POST',
-                    data: $httpParamSerializerJQLike(retailerdata), // Make sure to inject the service you choose to the controller
-                    headers: {
-                      'Content-Type': 'application/x-www-form-urlencoded' // Note the appropriate header
+                    data: {
+                        name: "Kim",
+                        status: "Best Friend"
                     }
-                  }).success(function(response) { /* do something here */ });
+                  }).success(function(response) { 
+                      console.log(response);
+                  });
 
             },
             doLogin: function (retailerdata) {

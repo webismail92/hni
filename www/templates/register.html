@@ -10,7 +10,7 @@
       <form name="myform" class="col s12">
         <div class="row">
           <div class="input-field col s6">
-            <input name="username" id="name" type="text" ng-model="reatailer.username" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters">
+            <input name="username" id="name" type="text" ng-model="retailer.username" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters">
             <label for="name" data-error="wrong" data-success="right">Full Name</label>
 
           </div>
@@ -48,7 +48,7 @@
             <label for="shopname" data-error="wrong" data-success="right">Shop Name</label>
           </div>
           <div class="input-field col s6">
-            <input id="contact" type="text" ng-model="retailer.contact"  class="validate" required="" ng-pattern="/(7|8|9)\d{12}/">
+            <input id="contact" type="text" ng-model="retailer.contact"  class="validate" required="">
             <label for="contact" data-error="wrong" data-success="right">Contact No.</label>
           </div>
         </div>

@@ -57,17 +57,17 @@ angular.module('starter.controllers', [])
     $scope.passwordnotmatch = false;
     $scope.register = function () {
       console.log("registered function called !");
-      if ($scope.retailer.c_password != $scope.retailer.password) {
-        $scope.retailer.c_password = "";
-        $scope.retailer.password = "";
-        $scope.passwordnotmatch = true;
-        console.log("password do not match");
-      }
-      else
-      {
+      // if ($scope.retailer.c_password != $scope.retailer.password) {
+      //   $scope.retailer.c_password = "";
+      //   $scope.retailer.password = "";
+      //   $scope.passwordnotmatch = true;
+      //   console.log("password do not match");
+      // }
+      // else
+      // {
         var status=MyServices.insertUser($scope.retailer);
         console.log(status);
-      }
+     // }
     }
   })
 
