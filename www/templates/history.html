@@ -6,25 +6,24 @@
     </div>
   </ion-header-bar>
   <ion-content>
-    <div class="row mb0">
-      <div class="col s12">
-        <div ng-repeat="product in products track by $index">
+    <div class="row mb0" ng-repeat="order in orderhistory track by $index">
+      <div class="col s12" >
         <div class="card horizontal">
-          <div class="card-image">
-            <img src="{{product.image}}" class="img-responsive">
-          </div>
+          <!-- <div class="card-image">
+            <img src="img/p1.jpg" class="img-responsive">
+          </div> -->
           <div class="card-stacked border-left">
             <div class="card-content">
               <div class="row pb0">
                 <div class="col s12">
                   <div class="pro">
-                    <p>{{product.name}}<span class="new badge" ng-if=product.featured>&nbsp;</span></p>
+                    <p>Name:{{order.name}}<span class=" badge" ng-class="{statusbadgepending:order.status=='pending',statusbadgeconfirmed:order.status=='confirmed'}" style="color:white !important">{{order.status.charAt(0).toUpperCase()+order.status.substr(1)}}</span></p>
                     <p>
-                      <span class="pull-left">{{product.volume}} </span>
-                      <span class="pull-right">&#8377; {{product.price}}</span>
+                      <span class="pull-left">Qty: {{order.quantity}} </span>
+                      <span class="pull-right" ng-if="order.quantity>0">Total : &#8377; {{order.quantity*order.price}}</span>
                     </p>
                     <p class="last">
-                      <button ng-click="proToProDetail($index)" class="waves-effect waves-light btn red lighten-1 pull-right">View</button>
+                      <button ng-if="order.status=='pending'" ng-click="cancelorder($index)" class="waves-effect waves-light btn red lighten-1 pull-right">Cancel</button>
                     </p>
                   </div>
                 </div>
@@ -32,7 +31,6 @@
             </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
     <!-- <div class="row mb10">

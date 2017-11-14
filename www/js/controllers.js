@@ -1,3 +1,4 @@
+var product = [];
 angular.module('starter.controllers', [])
 
   .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
@@ -43,10 +44,10 @@ angular.module('starter.controllers', [])
     };
   })
 
-  .controller('registerCtrl', function ($scope, $http, MyServices) {
+  .controller('registerCtrl', function ($scope, $http, MyServices, $location) {
     //console.log($scope.myform.username);
     $scope.retailer = {};
-    $scope.retailer.username = "";
+    $scope.retailer.name = "";
     $scope.retailer.email = "";
     $scope.retailer.password = "";
     $scope.retailer.c_password = "";
@@ -65,30 +66,72 @@ angular.module('starter.controllers', [])
       // }
       // else
       // {
-        var status=MyServices.insertUser($scope.retailer);
-        console.log(status);
-     // }
+
+      MyServices.insertUser($scope.retailer).then(function (param) {
+        console.log("i am in controller");
+        $.jStorage.set('name', promise.data.success.name);
+        $.jStorage.set('token', promise.data.success.token);
+        $.jStorage.set('id', promise.data.success.id);
+        console.log(param.data.success.name);
+        $location.path('app/product');
+      }).catch(function (fallback) {
+
+      });
+
+      // }
     }
   })
 
-  .controller('loginCtrl', function ($scope,MyServices) {
+  .controller('loginCtrl', function ($scope, MyServices) {
     $scope.retailer = {};
     $scope.retailer.email = "";
     $scope.retailer.password = "";
-    $scope.doLogin=function(){
-    
-      var status=MyServices.doLogin($scope.retailer);
+    $scope.doLogin = function () {
+
+      var status = MyServices.doLogin($scope.retailer);
       console.log(status);
     }
   })
 
-  .controller('productCtrl', function ($scope, $location) {
-    $scope.proToProDetail = function () {
+  .controller('productCtrl', function ($scope, $location, MyServices, $stateParams) {
+
+    $scope.products = [];
+    // }
+    MyServices.getProducts().then(function (param) {
+      $scope.products = param.data.products;
+      product = $scope.products;
+      console.log($scope.products);
+    });
+    $scope.proToProDetail = function (id) {
       console.log('called');
-      $location.path("app/product-detail");
+      $location.path("app/product-detail/" + id);
+
+    };
+    $scope.productdetails;
+    var id = $stateParams.id;
+    $scope.productdetails = product[id];
 
 
+  })
+  // .controller('productdetailsCtrl', function ($scope,$stateParams) {
+  //   $scope.productdetails;
+  //   var id= $stateParams.id;
+  //   $scope.productdetails=product[id];
+
+  // })
+
+
+  .controller('historyCtrl', function ($scope, MyServices) {
+    $scope.orderhistory = [];
+    MyServices.getOrderHistory().then(function (param) {
+      $scope.orderhistory = param.data.orders;
+
+      console.log(param.data.orders);
+    });
+    $scope.cancelorder = function (index) {
+      MyServices.cancelOrder( $scope.orderhistory[index].id);
     }
+
   })
 
   .controller('PlaylistCtrl', function ($scope, $stateParams) { });

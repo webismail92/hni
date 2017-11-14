@@ -458,3 +458,9 @@ textarea.materialize-textarea.invalid:focus,
 .pro-mar {
   margin: 6px 0px !important;
 }
+.statusbadgepending{
+  background: #EF5350 !important;
+}
+.statusbadgeconfirmed{
+  background: #26a69a !important;
+}

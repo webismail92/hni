@@ -100,11 +100,21 @@ angular.module('starter', ['ionic', 'starter.controllers','myservices'])
       })
 
       .state('app.product-detail', {
-        url: '/product-detail',
+        url: '/product-detail/:id',
         views: {
           'menuContent': {
-            templateUrl: 'templates/product-detail.html'
-            // controller: 'productCtrl'
+            templateUrl: 'templates/product-detail.html',
+             controller: 'productCtrl'
+          }
+        }
+      })
+
+      .state('app.history', {
+        url: '/history',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/history.html',
+             controller: 'historyCtrl'
           }
         }
       })
