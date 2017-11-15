@@ -44,57 +44,104 @@ angular.module('starter.controllers', [])
     };
   })
 
-  .controller('registerCtrl', function ($scope, $http, MyServices, $location) {
+  .controller('registerCtrl', function ($scope, $http, MyServices, $location,$cordovaGeolocation) {
     //console.log($scope.myform.username);
     $scope.retailer = {};
-    $scope.retailer.name = "";
-    $scope.retailer.email = "";
-    $scope.retailer.password = "";
-    $scope.retailer.c_password = "";
+    $scope.retailer.name = "jyoti";
+    $scope.retailer.email = "jyoti@gmail.com";
+    $scope.retailer.password = "jyoti";
+    $scope.retailer.c_password = "jyoti";
     $scope.retailer.gstin = "";
-    $scope.retailer.pan = "";
-    $scope.retailer.shopname = "";
-    $scope.retailer.contact = "";
+    $scope.retailer.pan = "zxcvbnm123";
+    $scope.retailer.shopname = "jyoti";
+    $scope.retailer.contact = "9768941186";
     $scope.passwordnotmatch = false;
-    $scope.register = function () {
-      console.log("registered function called !");
-      // if ($scope.retailer.c_password != $scope.retailer.password) {
-      //   $scope.retailer.c_password = "";
-      //   $scope.retailer.password = "";
-      //   $scope.passwordnotmatch = true;
-      //   console.log("password do not match");
-      // }
-      // else
-      // {
-
+    $scope.showAddressPage = false;
+    var getMap=function(){
+      console.log("method getMap called");
+      var options = {timeout: 10000, enableHighAccuracy: true};
+      
+       $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+      
+         var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      
+         var mapOptions = {
+           center: latLng,
+           zoom: 15,
+           mapTypeId: google.maps.MapTypeId.ROADMAP
+         };
+      
+         $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      
+       }, function(error){
+         console.log("Could not get location");
+       });
+    }
+    getMap();
+    $scope.callfunction = function () {
       MyServices.insertUser($scope.retailer).then(function (param) {
         console.log("i am in controller");
-        $.jStorage.set('name', promise.data.success.name);
-        $.jStorage.set('token', promise.data.success.token);
-        $.jStorage.set('id', promise.data.success.id);
-        console.log(param.data.success.name);
-        $location.path('app/product');
+        $.jStorage.flush();
+        $.jStorage.set('name', param.data.success.name);
+        $.jStorage.set('token', param.data.success.token);
+        $.jStorage.set('id', param.data.success.id);
+        console.log(param);
+        $scope.showAddressPage=true;
+        
+        // $location.path('app/product');
       }).catch(function (fallback) {
-
+        console.log("i am in fallback");
+        console.log(fallback);
       });
+    }
+    $scope.register = function () {
+      console.log("registered function called !");
 
-      // }
+
+
+
+
     }
   })
 
-  .controller('loginCtrl', function ($scope, MyServices) {
+  .controller('loginCtrl', function ($scope, MyServices, $location) {
     $scope.retailer = {};
-    $scope.retailer.email = "";
-    $scope.retailer.password = "";
+    $scope.retailer.email = "jyoti@gmail.com";
+    $scope.retailer.password = "jyoti";
+    $scope.emailrequired = false;
+    $scope.registerPage = function () {
+      $location.path('app/register');
+    }
     $scope.doLogin = function () {
+      $.jStorage.flush();
+      MyServices.doLogin($scope.retailer).then(function (param) {
+        $.jStorage.set('name', param.data.success.retailer.name);
+        $.jStorage.set('token', param.data.success.token);
+        $.jStorage.set('id', param.data.success.retailer.id);
+        $location.path('app/product');
+        console.log(param);
+      }).catch(function(fallback){
+        console.log(fallback);
+      });
+    }
+    $scope.generateOtp = function () {
+      if ($scope.retailer.email) {
+        MyServices.getOtp($scope.retailer.email).then(function (param) {
 
-      var status = MyServices.doLogin($scope.retailer);
-      console.log(status);
+        });
+        // }).catch(function (fallback) {
+
+        // });
+
+      } else
+        $scope.emailrequired = true;
+      console.log("otp generation function called");
     }
   })
 
   .controller('productCtrl', function ($scope, $location, MyServices, $stateParams) {
-
+    $scope. products={};
+    $scope. products.quantity=0;
     $scope.products = [];
     // }
     MyServices.getProducts().then(function (param) {
@@ -110,9 +157,17 @@ angular.module('starter.controllers', [])
     $scope.productdetails;
     var id = $stateParams.id;
     $scope.productdetails = product[id];
-
+    $scope.placeOrder=function(){
+      console.log($scope. products.quantity);
+      MyServices.orderProducts(product[id].id,$scope.products.quantity).then(function (param) {
+      console.log(param);
+        
+      });
+    }
 
   })
+ 
+
   // .controller('productdetailsCtrl', function ($scope,$stateParams) {
   //   $scope.productdetails;
   //   var id= $stateParams.id;
@@ -129,7 +184,7 @@ angular.module('starter.controllers', [])
       console.log(param.data.orders);
     });
     $scope.cancelorder = function (index) {
-      MyServices.cancelOrder( $scope.orderhistory[index].id);
+      MyServices.cancelOrder($scope.orderhistory[index].id);
     }
 
   })

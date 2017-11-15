@@ -11,7 +11,7 @@
         <div ng-repeat="product in products track by $index">
         <div class="card horizontal">
           <div class="card-image">
-            <img src="{{product.image}}" class="img-responsive">
+            <img src="{{'http://localhost:8000/'+product.image.replace('public','thumb/storage')}}" class="img-responsive">
           </div>
           <div class="card-stacked border-left">
             <div class="card-content">

@@ -7,7 +7,7 @@
   </ion-header-bar>
   <ion-content>
     <div class="row">
-      <form name="myform" class="col s12">
+      <form name="myform" class="col s12" ng-show="!showAddressPage">
         <div class="row">
           <div class="input-field col s6">
             <input name="username" id="name" type="text" ng-model="retailer.name" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters">
@@ -29,7 +29,7 @@
           <div class="input-field col s6">
             <input id="c_password" type="password" ng-change=passwordnotmatch=false ng-model="retailer.c_password" class="validate" required="">
             <label for="c_password" data-error="wrong" data-success="right">Confirm Password</label>
-            <span ng-if=passwordnotmatch >password do not match</span>
+            <span ng-if=passwordnotmatch>password do not match</span>
           </div>
         </div>
         <div class="row">
@@ -44,22 +44,62 @@
         </div>
         <div class="row">
           <div class="input-field col s6">
-            <input id="shopname" type="text" ng-model="retailer.shopname"  class="validate" required="">
+            <input id="shopname" type="text" ng-model="retailer.shopname" class="validate" required="">
             <label for="shopname" data-error="wrong" data-success="right">Shop Name</label>
           </div>
           <div class="input-field col s6">
-            <input id="contact" type="text" ng-model="retailer.contact"  class="validate" required="">
+            <input id="contact" type="text" ng-model="retailer.contact" class="validate" required="">
             <label for="contact" data-error="wrong" data-success="right">Contact No.</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s12 text-center">
-            <button class="btn-large waves-effect waves-light red lighten-1" ng-click="register()">Register
-              <!-- <i class="material-icons right">send</i> -->
-            </button>
+            <!-- <button class="btn-large waves-effect waves-light red lighten-1" ng-click="register()">Finish
+              <!-- <i class="material-icons right">send</i>
+            </button> -->
+            <a ng-click="callfunction()">
+              <span style="float:right">Next &nbsp;
+                <i class="ion-chevron-right"></i>
+              </span>
+            </a>
           </div>
         </div>
       </form>
     </div>
+    <form ng-show="showAddressPage">
+      <div class="row">
+        <div class="input-field col s6">
+          <textarea name="username" id="name" ng-model="retailer.address" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters"></textarea>
+          <label for="name" data-error="wrong" data-success="right">Address</label>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input name="username" id="name" type="text" ng-model="retailer.city" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters">
+          <label for="name" data-error="wrong" data-success="right">City</label>
+
+        </div>
+        <div class="input-field col s6">
+          <input id="email" name="emailaddress" ng-model="retailer.pincode" type="email" class="validate" required="">
+          <label for="email" data-error="Invalid address" data-success="right">Pincode</label>
+          <!-- <span ng-if=myform.emailaddress.$error.email >Invalid Email address</span> -->
+          <!-- <span ng-if=myform.emailaddress.$error.required >Email is required</span> -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12 text-center">
+<div id="map" ></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12 text-center">
+          <button class="btn-large waves-effect waves-light red lighten-1" ng-click="register()">Finish
+            <i class="material-icons right"></i>
+          </button>
+        </div>
+      </div>
+
+    </form>
   </ion-content>
 </ion-view>
