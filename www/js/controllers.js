@@ -44,8 +44,9 @@ angular.module('starter.controllers', [])
     };
   })
 
-  .controller('registerCtrl', function ($scope, $http, MyServices, $location,$cordovaGeolocation) {
+  .controller('registerCtrl', function ($scope, $http, MyServices, $location, $cordovaGeolocation) {
     //console.log($scope.myform.username);
+    var infowindow;
     $scope.retailer = {};
     $scope.retailer.name = "jyoti";
     $scope.retailer.email = "jyoti@gmail.com";
@@ -56,27 +57,80 @@ angular.module('starter.controllers', [])
     $scope.retailer.shopname = "jyoti";
     $scope.retailer.contact = "9768941186";
     $scope.passwordnotmatch = false;
-    $scope.showAddressPage = false;
-    var getMap=function(){
+    $scope.showAddressPage = true;
+    var previousmarker = {};
+    var getMap = function () {
       console.log("method getMap called");
-      var options = {timeout: 10000, enableHighAccuracy: true};
-      
-       $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-      
-         var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      
-         var mapOptions = {
-           center: latLng,
-           zoom: 15,
-           mapTypeId: google.maps.MapTypeId.ROADMAP
-         };
-      
-         $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-      
-       }, function(error){
-         console.log("Could not get location");
-       });
+      var options = { timeout: 10000, enableHighAccuracy: true };
+
+      $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+
+        var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+        var mapOptions = {
+          center: latLng,
+          zoom: 15,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var pyrmont = { lat: position.coords.latitude, lng: position.coords.longitude };
+        $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        google.maps.event.addListener($scope.map, 'click', function (event) {
+          //  $scope.map.remove(previousmarker);
+
+          createMarker(event.latLng);
+          console.log(event.va);//.view.window.close());
+        });
+        //$scope.map.setVisible(true);
+        var infowindow = new google.maps.InfoWindow();
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        searchBox.addListener('places_changed', function () {
+          var places = searchBox.getPlaces();
+          console.log($scope.map);
+
+
+          latLng = new google.maps.LatLng(places[0].geometry.location.lat(), places[0].geometry.location.lng());
+          mapOptions = {
+            center: latLng,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          };
+          //$scope.map.animateCamera();
+          console.log($scope.map);
+          $scope.map.setOptions(mapOptions);
+
+          createMarker(places[0].geometry.location);
+          console.log(places[0].geometry.location.lat() + " " + places[0].geometry.location.lng());
+          if (places.length == 0) {
+            return;
+          }
+        });
+        // $scope.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // var service = new google.maps.places.PlacesService($scope.map);
+
+
+      }, function (error) {
+        console.log("Could not get location");
+      });
     }
+
+
+    function createMarker(place) {
+      //var placeLoc = place.geometry.location;
+      // infowindow.close();
+      var marker = new google.maps.Marker({
+        map: $scope.map,
+        position: place
+      });
+      previousmarker = marker;
+      console.log("place object");
+      console.log(place);
+      //$scope.map.addMarker(marker);
+
+
+    }
+
     getMap();
     $scope.callfunction = function () {
       MyServices.insertUser($scope.retailer).then(function (param) {
@@ -86,8 +140,8 @@ angular.module('starter.controllers', [])
         $.jStorage.set('token', param.data.success.token);
         $.jStorage.set('id', param.data.success.id);
         console.log(param);
-        $scope.showAddressPage=true;
-        
+        $scope.showAddressPage = true;
+
         // $location.path('app/product');
       }).catch(function (fallback) {
         console.log("i am in fallback");
@@ -96,7 +150,11 @@ angular.module('starter.controllers', [])
     }
     $scope.register = function () {
       console.log("registered function called !");
-
+      MyServices.insertAddress($scope.retailer).then(function (param) {
+        console.log(param);
+      }).catch(function (fallback) {
+        console.log(fallback);
+      });
 
 
 
@@ -109,6 +167,10 @@ angular.module('starter.controllers', [])
     $scope.retailer.email = "jyoti@gmail.com";
     $scope.retailer.password = "jyoti";
     $scope.emailrequired = false;
+    $scope.forgot={};
+    $scope.forgot.email="";
+    $scope.forgot.sendtoemail=false;
+    var min=15,sec=0;
     $scope.registerPage = function () {
       $location.path('app/register');
     }
@@ -120,28 +182,36 @@ angular.module('starter.controllers', [])
         $.jStorage.set('id', param.data.success.retailer.id);
         $location.path('app/product');
         console.log(param);
-      }).catch(function(fallback){
+      }).catch(function (fallback) {
         console.log(fallback);
       });
     }
+    var setTimer=function(){
+            if(sec==0)
+            sec=
+
+    }
     $scope.generateOtp = function () {
-      if ($scope.retailer.email) {
-        MyServices.getOtp($scope.retailer.email).then(function (param) {
-
+      console.log("otp generation function called");
+      console.log($scope.forgot);
+      if ($scope.forgot.email) {
+        MyServices.getOtp($scope.forgot.email,$scope.forgot.sendtoemail).then(function (param) {
+          console.log(param);
+          $interval(setTimer(), 1000);
+          
+        }).catch(function (fallback) {
+          
         });
-        // }).catch(function (fallback) {
-
-        // });
 
       } else
         $scope.emailrequired = true;
-      console.log("otp generation function called");
+    
     }
   })
 
   .controller('productCtrl', function ($scope, $location, MyServices, $stateParams) {
-    $scope. products={};
-    $scope. products.quantity=0;
+    $scope.products = {};
+    $scope.products.quantity = 0;
     $scope.products = [];
     // }
     MyServices.getProducts().then(function (param) {
@@ -154,26 +224,23 @@ angular.module('starter.controllers', [])
       $location.path("app/product-detail/" + id);
 
     };
-    $scope.productdetails;
-    var id = $stateParams.id;
-    $scope.productdetails = product[id];
-    $scope.placeOrder=function(){
-      console.log($scope. products.quantity);
-      MyServices.orderProducts(product[id].id,$scope.products.quantity).then(function (param) {
-      console.log(param);
-        
-      });
-    }
 
   })
- 
 
-  // .controller('productdetailsCtrl', function ($scope,$stateParams) {
-  //   $scope.productdetails;
-  //   var id= $stateParams.id;
-  //   $scope.productdetails=product[id];
 
-  // })
+  .controller('productdetailsCtrl', function ($scope, $stateParams) {
+    $scope.productdetails = {};
+    var id = $stateParams.id;
+
+    $scope.productdetails = product[id];
+    $scope.placeOrder = function () {
+      console.log($scope.products.quantity);
+      MyServices.orderProducts(product[id].id, $scope.products.quantity).then(function (param) {
+        console.log(param);
+
+      });
+    }
+  })
 
 
   .controller('historyCtrl', function ($scope, MyServices) {

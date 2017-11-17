@@ -24,31 +24,31 @@
             <label for="password" data-error="wrong" data-success="right">Password</label>
           </div>
         </div>
-        <div class="row">
-          <a ng-click="generateOtp()">forgot password ?</a>
+        <div class="">
+          <div class="text-center">
+            <a href="#/app/forgotpassword">forgot password ?</a>
+          </div>
         </div>
         <div class="row">
           <div class="input-field col s12 text-center">
-            <button class="btn-large waves-effect waves-light red lighten-1" type="submit" name="action">Login
+            <button class="btn waves-effect waves-light red lighten-1" type="submit" name="action">Login
               <!-- <i class="material-icons right">send</i> -->
             </button>
-
           </div>
-          
         </div>
-      
-        <div class="row">
-            
-                  <div class="input-field col s12 text-center">
-                    <button class="btn-large waves-effect waves-light red lighten-1" ng-click="registerPage()" >Register
-                      <!-- <i class="material-icons right">send</i> -->
-                    </button>
-            
-                  </div>
-                </div>
-
+        <div class="">
+          <div class="text-center">
+            <a href="#/app/register">Don't have an account? <b>Register</b></a>
+          </div>
+        </div>
+        <!-- <div class="row">
+          <div class="input-field col s12 text-center">
+            <button class="btn-large waves-effect waves-light red lighten-1" type="submit" name="action">Register
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+        </div> -->
+      </form>
     </div>
-    </form>
-   
   </ion-content>
 </ion-view>

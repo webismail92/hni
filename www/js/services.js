@@ -1,5 +1,5 @@
 
-var adminurl = "my url";
+var baseUrl = "http://localhost:8000/api/";
 var myservices = angular.module('myservices', [])
 
 
@@ -19,14 +19,14 @@ var myservices = angular.module('myservices', [])
                     "async": false,
 
                 }).success(function (response) {
-                   
+
                 }).error(function (response) {
-                    
+
                 });
 
             },
-            
-         
+
+
             doLogin: function (retailerdata) {
                 console.log("in dologin function ! ");
                 return $http({
@@ -37,9 +37,9 @@ var myservices = angular.module('myservices', [])
                     "async": false,
 
                 }).success(function (response) {
-                   
+
                 }).error(function (response) {
-                    
+
                 });
 
             },
@@ -49,11 +49,11 @@ var myservices = angular.module('myservices', [])
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
-                        'Authorization': 'Bearer '+$.jStorage.get('token'),
+                        'Authorization': 'Bearer ' + $.jStorage.get('token'),
 
                     },
-                  
-                    
+
+
 
                 }).success(function (response) {
                     console.log(response);
@@ -84,9 +84,9 @@ var myservices = angular.module('myservices', [])
                 return $http({
                     url: "http://localhost:8000/api/cancel-order/" + id,
                     method: 'POST',
-                    headers:{
-                        Accept:'application/json',
-                        Authorization:'bearer '+$.jStorage.get('token')
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: 'bearer ' + $.jStorage.get('token')
                     }
 
                 }).success(function (response) {
@@ -97,12 +97,12 @@ var myservices = angular.module('myservices', [])
 
 
             },
-            getOtp: function (emailid) {
+            getOtp: function (emailid, sendtoemail) {
                 return $http({
-                    url: "http://localhost:8000/api/",
+                    url: "http://localhost:8000/api/retailer/",
                     method: 'POST',
-                    data: { 'email': emailid }
-
+                    data: { 'email': emailid, 'sendtoemail': sendtoemail }
+                    
                 }).success(function (response) {
 
                 }).error(function (response) {
@@ -111,20 +111,20 @@ var myservices = angular.module('myservices', [])
 
 
             },
-            orderProducts:function(id,qty){
-                var orderdetail={
-                    'product_id':id,
-                    'quantity':qty,
-                
+            orderProducts: function (id, qty) {
+                var orderdetail = {
+                    'product_id': id,
+                    'quantity': qty,
+
                 };
 
                 return $http({
                     url: "http://localhost:8000/api/retailer/place-order",
                     method: 'POST',
                     data: orderdetail,
-                    headers:{
-                        Accept:'application/json',
-                        Authorization:'Bearer '+$.jStorage.get('token')
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: 'Bearer ' + $.jStorage.get('token')
                     }
 
                 }).success(function (response) {
@@ -136,6 +136,19 @@ var myservices = angular.module('myservices', [])
                     console.log(response);
                 });
 
+            },
+            insertUser: function (retailerdata) {
+                var address = { 'address': retailerdata.address, 'pincode': retailerdata.pincode, 'city': retailerdata.city }
+                return $http({
+                    url: baseUrl + "retailer/address",
+                    method: 'POST',
+                    data: address
+
+                }).success(function (response) {
+                    console.log(response.success);
+                }).error(function (response) {
+                    console.log(response.error);
+                });
             },
 
         }

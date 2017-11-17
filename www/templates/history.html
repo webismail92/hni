@@ -1,4 +1,4 @@
-<ion-view>
+<ion-view class="body-bg">
   <ion-header-bar>
     <h1 class="title">Product</h1>
     <div class="buttons">
@@ -6,26 +6,39 @@
     </div>
   </ion-header-bar>
   <ion-content>
-    <div class="row mb0" ng-repeat="order in orderhistory track by $index">
-      <div class="col s12" >
+
+    <div class="row mb0">
+      <div class="col s12">
         <div class="card horizontal">
-          <!-- <div class="card-image">
-            <img src="img/p1.jpg" class="img-responsive">
-          </div> -->
           <div class="card-stacked border-left">
             <div class="card-content">
               <div class="row pb0">
                 <div class="col s12">
-                  <div class="pro">
-                    <p>Name:{{order.name}}<span class=" badge" ng-class="{statusbadgepending:order.status=='pending',statusbadgeconfirmed:order.status=='confirmed'}" style="color:white !important">{{order.status.charAt(0).toUpperCase()+order.status.substr(1)}}</span></p>
-                    <p>
-                      <span class="pull-left">Qty: {{order.quantity}} </span>
-                      <span class="pull-right" ng-if="order.quantity>0">Total : &#8377; {{order.quantity*order.price}}</span>
-                    </p>
-                    <p class="last">
-                      <button ng-if="order.status=='pending'" ng-click="cancelorder($index)" class="waves-effect waves-light btn red lighten-1 pull-right">Cancel</button>
-                    </p>
-                  </div>
+                  <p>{{history.name}}</p>
+                </div>
+              </div>
+              <div class="row pb0">
+                <div class="col s6">
+                  <p>Volume : {{history.volume}} ML </p>
+                </div>
+                <div class="col s6">
+                  <p>Qty : {{history.quantity}} piece</p>
+                </div>
+              </div>
+              <div class="row pb0">
+                <div class="col s6">
+                  <p>Price : &#8377; {{history.price}}</p>
+                </div>
+                <div class="col s6">
+                  <p>status :
+                    <span class="badge badge-cus red ">{{history.status}}</span>
+                  </p>
+                </div>
+              </div>
+              <div class="row pb0">
+                <div class="col s6"></div>
+                <div class="col s6">
+                  <p>Date : {{history.created_at}}</p>
                 </div>
               </div>
             </div>
@@ -33,32 +46,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="row mb10">
-      <div class="col s12">
-        <div class="card horizontal">
-          <div class="card-image">
-            <img src="img/p1.jpg" class="img-responsive">
-          </div>
-          <div class="card-stacked border-left">
-            <div class="card-content">
-              <div class="row pb0">
-                <div class="col s12">
-                  <div class="pro">
-                    <p>B FLIRT</p>
-                    <p>
-                      <span class="pull-left">100 ML </span>
-                      <span class="pull-right">&#8377; 500</span>
-                    </p>
-                    <p class="last">
-                      <button ng-click="proToProDetail()" class="waves-effect waves-light btn red lighten-1 pull-right">View</button>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
+
   </ion-content>
 </ion-view>

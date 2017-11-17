@@ -22,7 +22,7 @@ angular.module('starter', ['ionic', 'starter.controllers','myservices','ngCordov
     });
   })
 
-  .config(function ($stateProvider, $urlRouterProvider,$httpProvider) {
+  .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
 
       .state('app', {
@@ -104,7 +104,7 @@ angular.module('starter', ['ionic', 'starter.controllers','myservices','ngCordov
         views: {
           'menuContent': {
             templateUrl: 'templates/product-detail.html',
-             controller: 'productCtrl'
+           controller: 'productdetailsCtrl'
           }
         }
       })
@@ -114,10 +114,20 @@ angular.module('starter', ['ionic', 'starter.controllers','myservices','ngCordov
         views: {
           'menuContent': {
             templateUrl: 'templates/history.html',
-             controller: 'historyCtrl'
+            controller: 'historyCtrl'
           }
         }
       })
+      .state('app.forgotpassword', {
+        url: '/forgotpassword',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/forgotpassword.html',
+            controller: 'loginCtrl'
+          }
+        }
+      })
+      
       ;
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/product');
