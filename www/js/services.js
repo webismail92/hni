@@ -97,11 +97,11 @@ var myservices = angular.module('myservices', [])
 
 
             },
-            getOtp: function (emailid, sendtoemail) {
+            getOtp: function (emailid) {
                 return $http({
-                    url: "http://localhost:8000/api/retailer/",
+                    url: baseUrl+"retailer/forget-password",
                     method: 'POST',
-                    data: { 'email': emailid, 'sendtoemail': sendtoemail }
+                    data: { 'email': emailid }
                     
                 }).success(function (response) {
 
@@ -150,6 +150,19 @@ var myservices = angular.module('myservices', [])
                     console.log(response.error);
                 });
             },
+            verifyOtp:function(otp){
+                return $http({
+                    url: baseUrl + "retailer/verify-otp",
+                    method: 'POST',
+                    data: otp
+
+                }).success(function (response) {
+                    console.log(response.success);
+                }).error(function (response) {
+                    console.log(response.error);
+                });
+            },
+            
 
         }
     });

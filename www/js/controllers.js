@@ -162,15 +162,21 @@ angular.module('starter.controllers', [])
     }
   })
 
-  .controller('loginCtrl', function ($scope, MyServices, $location) {
+  .controller('loginCtrl', function ($scope, MyServices, $location,$interval) {
     $scope.retailer = {};
     $scope.retailer.email = "jyoti@gmail.com";
     $scope.retailer.password = "jyoti";
     $scope.emailrequired = false;
     $scope.forgot={};
     $scope.forgot.email="";
-    $scope.forgot.sendtoemail=false;
-    var min=15,sec=0;
+    $scope.enterotp=false;
+    $scope.showresetpassword=false;
+  
+    $scope.buttonname="Verify";
+   
+
+    var stoptimer=false;
+       $scope.min=2,$scope.sec=00;
     $scope.registerPage = function () {
       $location.path('app/register');
     }
@@ -186,22 +192,74 @@ angular.module('starter.controllers', [])
         console.log(fallback);
       });
     }
-    var setTimer=function(){
-            if(sec==0)
-            sec=
+    $scope.checkForOtp=function(){
+      console.log($scope.forgot.otp);
+      if($scope.forgot.otp)
+      { 
+
+      verifyOtp();
+      }
+      else
+      {
+      resendOtp();
+      }
+    }
+   var verifyOtp=function(){
+   
+    console.log("i am in verify otp");
+    MyServices.verifyOtp($scope.forgot.otp).then(function (param) {
+      console.log(param);
+       $scope.enterotp=false;
+       $scope.showresetpassword=true;
+     }).catch(function (fallback) {
+       resendOtp();
+      });
 
     }
+    var resendOtp=function(){
+     
+      console.log("i am in resend otp");
+      MyServices.getOtp($scope.forgot.email).then(function (param) {
+        console.log('OTP is sent');
+        console.log(param);
+       }).catch(function (fallback) {
+        console.log('OTP is not sent');
+        console.log(fallback);
+      });
+
+    }
+    var stopTimer=function(){
+      stoptimer=true;
+      $scope.forgot.otp="";
+     $scope.buttonname="Resend OTP";
+      // $scope.checkForOtp();
+      console.log("I am called");
+      $interval.cancel(intervalfunction);
+    }
+    var setTimer=function(){
+     // console.log("i am called");
+           if($scope.sec==0 )  
+           {        
+            
+             if($scope.min>0) 
+             {
+             $scope.sec=60;                                                                                         $scope.min--;
+             }
+             else
+             stopTimer();    
+           
+              }
+         
+           if(!stoptimer)
+           $scope.sec--;
+
+    }
+    var intervalfunction=$interval(setTimer, 1000);
     $scope.generateOtp = function () {
       console.log("otp generation function called");
       console.log($scope.forgot);
       if ($scope.forgot.email) {
-        MyServices.getOtp($scope.forgot.email,$scope.forgot.sendtoemail).then(function (param) {
-          console.log(param);
-          $interval(setTimer(), 1000);
-          
-        }).catch(function (fallback) {
-          
-        });
+        resendOtp();
 
       } else
         $scope.emailrequired = true;
