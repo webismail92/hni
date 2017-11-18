@@ -196,8 +196,8 @@ angular.module('starter.controllers', [])
       console.log($scope.forgot.otp);
       if($scope.forgot.otp)
       { 
-
-      verifyOtp();
+        stopTimer();  
+       verifyOtp();
       }
       else
       {
@@ -221,7 +221,10 @@ angular.module('starter.controllers', [])
       console.log("i am in resend otp");
       MyServices.getOtp($scope.forgot.email).then(function (param) {
         console.log('OTP is sent');
-        console.log(param);
+        
+        $scope.uniqueId=param.data.unique_id;
+        console.log( $scope.uniqueId);
+         $scope.enterotp=true;
        }).catch(function (fallback) {
         console.log('OTP is not sent');
         console.log(fallback);
@@ -255,6 +258,8 @@ angular.module('starter.controllers', [])
 
     }
     var intervalfunction=$interval(setTimer, 1000);
+
+
     $scope.generateOtp = function () {
       console.log("otp generation function called");
       console.log($scope.forgot);
