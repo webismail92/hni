@@ -668,3 +668,8 @@ textarea.materialize-textarea:focus:not([readonly])+label {
   border-radius: 0;
   color: white !important;
 }
+/* map styling */
+#map{
+  height: 400px !important;
+  width: 100% !important;
+}

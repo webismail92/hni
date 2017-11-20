@@ -10,18 +10,18 @@ var myservices = angular.module('myservices', [])
 
         return {
             insertUser: function (retailerdata) {
-
+                console.log('i am in insert user');
                 return $http({
-                    url: 'http://localhost:8000/api/retailer/register',
+                    url: baseUrl + "retailer/register",
                     method: 'POST',
                     data: retailerdata,
 
-                    "async": false,
+
 
                 }).success(function (response) {
-
+                    console.log(response);
                 }).error(function (response) {
-
+                    console.log(response);
                 });
 
             },
@@ -30,7 +30,7 @@ var myservices = angular.module('myservices', [])
             doLogin: function (retailerdata) {
                 console.log("in dologin function ! ");
                 return $http({
-                    url: 'http://localhost:8000/api/retailer/login',
+                    url: baseUrl + 'retailer/login',
                     method: 'POST',
                     data: retailerdata,
 
@@ -45,7 +45,7 @@ var myservices = angular.module('myservices', [])
             },
             getProducts: function () {
                 return $http({
-                    url: 'http://localhost:8000/api/retailer/products',
+                    url: baseUrl + 'retailer/products',
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
@@ -67,7 +67,7 @@ var myservices = angular.module('myservices', [])
 
             getOrderHistory: function () {
                 return $http({
-                    url: "http://localhost:8000/api/demo",
+                    url: baseUrl + "demo",
                     method: 'GET',
 
 
@@ -82,7 +82,7 @@ var myservices = angular.module('myservices', [])
             },
             cancelOrder: function (id) {
                 return $http({
-                    url: "http://localhost:8000/api/cancel-order/" + id,
+                    url: baseUrl + "cancel-order/" + id,
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -99,10 +99,10 @@ var myservices = angular.module('myservices', [])
             },
             getOtp: function (emailid) {
                 return $http({
-                    url: baseUrl+"retailer/forget-password",
+                    url: baseUrl + "retailer/password/forgot",
                     method: 'POST',
                     data: { 'email': emailid }
-                    
+
                 }).success(function (response) {
 
                 }).error(function (response) {
@@ -119,7 +119,7 @@ var myservices = angular.module('myservices', [])
                 };
 
                 return $http({
-                    url: "http://localhost:8000/api/retailer/place-order",
+                    url: baseUrl + "retailer/place-order",
                     method: 'POST',
                     data: orderdetail,
                     headers: {
@@ -137,12 +137,17 @@ var myservices = angular.module('myservices', [])
                 });
 
             },
-            insertUser: function (retailerdata) {
-                var address = { 'address': retailerdata.address, 'pincode': retailerdata.pincode, 'city': retailerdata.city }
+            insertAddress: function (retailerdata) {
+                var senddata = { 'address': retailerdata.address, 'pincode': retailerdata.pincode, 'city': retailerdata.city, 'latitude': retailerdata.lat.toString(), 'longitude': retailerdata.lng.toString(), 'landmark': "wait for 1 day" }
                 return $http({
-                    url: baseUrl + "retailer/address",
+                    url: baseUrl + "retailer/address/add",
                     method: 'POST',
-                    data: address
+                    data: senddata,
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: 'Bearer ' + $.jStorage.get('token')
+                    }
+
 
                 }).success(function (response) {
                     console.log(response.success);
@@ -150,11 +155,11 @@ var myservices = angular.module('myservices', [])
                     console.log(response.error);
                 });
             },
-            verifyOtp:function(otp){
+            verifyOtp: function (otp, id, email) {
                 return $http({
-                    url: baseUrl + "retailer/verify-otp",
+                    url: baseUrl + "retailer/password/verify-otp",
                     method: 'POST',
-                    data: otp
+                    data: { 'otp': otp, 'unique_id': id, 'email': email }
 
                 }).success(function (response) {
                     console.log(response.success);
@@ -162,7 +167,52 @@ var myservices = angular.module('myservices', [])
                     console.log(response.error);
                 });
             },
-            
+            getDetails: function () {
+                return $http({
+                    url: baseUrl + 'retailer/details',
+                    method: 'GET',
+                    headers:
+                        {
+                            Accept: 'application/json',
+                            Authorization: 'Bearer ' + $.jStorage.get('token')
+                        }
+                }).success(function (response) {
+
+                }).error(function (response) {
+
+                });
+            },
+            logOut: function () {
+                return $http({
+                    url: baseUrl + 'retailer/logout',
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: 'Bearer ' + $.jStorage.get('token')
+                    }
+                }).success(function (response) {
+
+                }).error(function (response) {
+
+                })
+
+
+            },
+            resetPassword: function (newpassord) {
+                return $http({
+                    url: baseUrl + '/password/reset',
+                    method: 'post',
+                    data: newpassord
+
+                }).success(function (response) {
+                    console.log(response);
+
+                }).error(function (response) {
+                    console.log(response);
+                });
+
+            }
+
 
         }
     });

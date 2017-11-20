@@ -1,7 +1,7 @@
 var product = [];
 angular.module('starter.controllers', [])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, MyServices, $location, $rootScope) {
 
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
@@ -10,41 +10,52 @@ angular.module('starter.controllers', [])
     //$scope.$on('$ionicView.enter', function(e) {
     //});
 
-    // Form data for the login modal
+    //check user logged in 
+    // MyServices.logOut();
+    $rootScope.redirectedtofilladdress = false;
+    if ($.jStorage.get('token')) {
+      //make request on details 
+      MyServices.getDetails().then(function (params) {
+        console.log('i am in success');
+        console.log(params);
+        $location.path('app/product');
+      }).catch(function (fallback) {
+        console.log('i am in fallback')
+        console.log(fallback);
+        if (fallback.data) {
+          if (fallback.data.address) {
+            console.log(fallback.data.address);
+            $location.path('app/register');
+            $rootScope.redirectedtofilladdress = true;
 
-    // $scope.registerData = {};
-    $scope.loginData = {};
 
-    // Create the login modal that we will use later
-    $ionicModal.fromTemplateUrl('templates/login.html', {
-      scope: $scope
-    }).then(function (modal) {
-      $scope.modal = modal;
-    });
+          } else if (fallback.data.blocked) {
+            console.log(fallback.data.blocked);
+            $location.path('app/product');
+            $rootScope.showblockeddiv = true;
+          }
+        }
 
-    // Triggered in the login modal to close it
-    $scope.closeLogin = function () {
-      $scope.modal.hide();
-    };
+      })
 
-    // Open the login modal
-    $scope.login = function () {
-      $scope.modal.show();
-    };
 
-    // Perform the login action when the user submits the login form
-    $scope.doLogin = function () {
-      console.log('Doing login', $scope.loginData);
+    }
+    $scope.logOut = function () {
+      console.log("log out function called !");
+      MyServices.logOut().then(function (params) {
+        $.jStorage.flush();
+        $location.path('app/login');
+      }).catch(function (fallback) {
 
-      // Simulate a login delay. Remove this and replace with your login
-      // code if using a login system
-      $timeout(function () {
-        $scope.closeLogin();
-      }, 1000);
-    };
+      });
+
+    }
+
+
+
   })
 
-  .controller('registerCtrl', function ($scope, $http, MyServices, $location, $cordovaGeolocation) {
+  .controller('registerCtrl', function ($scope, $http, MyServices, $location, $cordovaGeolocation, $rootScope) {
     //console.log($scope.myform.username);
     var infowindow;
     $scope.retailer = {};
@@ -56,8 +67,13 @@ angular.module('starter.controllers', [])
     $scope.retailer.pan = "zxcvbnm123";
     $scope.retailer.shopname = "jyoti";
     $scope.retailer.contact = "9768941186";
+    $scope.retailer.address = "";
+    $scope.retailer.pincode = "";
+    $scope.retailer.city = "";
+    $scope.retailer.lat = 0;
+    $scope.retailer.lng = 0;
     $scope.passwordnotmatch = false;
-    $scope.showAddressPage = true;
+
     var previousmarker = {};
     var getMap = function () {
       console.log("method getMap called");
@@ -75,19 +91,21 @@ angular.module('starter.controllers', [])
         var pyrmont = { lat: position.coords.latitude, lng: position.coords.longitude };
         $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
         google.maps.event.addListener($scope.map, 'click', function (event) {
-          //  $scope.map.remove(previousmarker);
-
+          $scope.retailer.lat = event.latLng.lat();
+          $scope.retailer.lng = event.latLng.lng();
+          console.log(event.latLng);
           createMarker(event.latLng);
-          console.log(event.va);//.view.window.close());
+
         });
-        //$scope.map.setVisible(true);
-        var infowindow = new google.maps.InfoWindow();
+
+
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
         searchBox.addListener('places_changed', function () {
           var places = searchBox.getPlaces();
           console.log($scope.map);
-
+          $scope.retailer.lat = places[0].geometry.location.lat();
+          $scope.retailer.lng = places[0].geometry.location.lng();
 
           latLng = new google.maps.LatLng(places[0].geometry.location.lat(), places[0].geometry.location.lng());
           mapOptions = {
@@ -133,6 +151,7 @@ angular.module('starter.controllers', [])
 
     getMap();
     $scope.callfunction = function () {
+      console.log("i am in controller");
       MyServices.insertUser($scope.retailer).then(function (param) {
         console.log("i am in controller");
         $.jStorage.flush();
@@ -140,7 +159,7 @@ angular.module('starter.controllers', [])
         $.jStorage.set('token', param.data.success.token);
         $.jStorage.set('id', param.data.success.id);
         console.log(param);
-        $scope.showAddressPage = true;
+        $rootScope.redirectedtofilladdress = true;
 
         // $location.path('app/product');
       }).catch(function (fallback) {
@@ -151,6 +170,7 @@ angular.module('starter.controllers', [])
     $scope.register = function () {
       console.log("registered function called !");
       MyServices.insertAddress($scope.retailer).then(function (param) {
+        $location.path('app/product');
         console.log(param);
       }).catch(function (fallback) {
         console.log(fallback);
@@ -162,25 +182,29 @@ angular.module('starter.controllers', [])
     }
   })
 
-  .controller('loginCtrl', function ($scope, MyServices, $location,$interval) {
+  .controller('loginCtrl', function ($scope, MyServices, $location, $interval) {
     $scope.retailer = {};
     $scope.retailer.email = "jyoti@gmail.com";
     $scope.retailer.password = "jyoti";
     $scope.emailrequired = false;
-    $scope.forgot={};
-    $scope.forgot.email="";
-    $scope.enterotp=false;
-    $scope.showresetpassword=false;
-  
-    $scope.buttonname="Verify";
-   
+    $scope.forgot = {};
+    $scope.forgot.email = "";
+    $scope.enterotp = false;
+    $scope.showresetpassword = true;
+    $scope.new={};
+    $scope.new.password="";
+    $scope.new.confirmpassword="";
 
-    var stoptimer=false;
-       $scope.min=2,$scope.sec=00;
+    $scope.buttonname = "Verify";
+
+
+    var stoptimer = false;
+    $scope.min = 2, $scope.sec = 00;
     $scope.registerPage = function () {
       $location.path('app/register');
     }
     $scope.doLogin = function () {
+      console.log($scope.retailer.email);
       $.jStorage.flush();
       MyServices.doLogin($scope.retailer).then(function (param) {
         $.jStorage.set('name', param.data.success.retailer.name);
@@ -192,72 +216,68 @@ angular.module('starter.controllers', [])
         console.log(fallback);
       });
     }
-    $scope.checkForOtp=function(){
+    $scope.checkForOtp = function () {
       console.log($scope.forgot.otp);
-      if($scope.forgot.otp)
-      { 
-        stopTimer();  
-       verifyOtp();
+      if ($scope.forgot.otp) {
+        stopTimer();
+        verifyOtp();
       }
-      else
-      {
-      resendOtp();
+      else {
+        resendOtp();
       }
     }
-   var verifyOtp=function(){
-   
-    console.log("i am in verify otp");
-    MyServices.verifyOtp($scope.forgot.otp).then(function (param) {
-      console.log(param);
-       $scope.enterotp=false;
-       $scope.showresetpassword=true;
-     }).catch(function (fallback) {
-       resendOtp();
+    var verifyOtp = function () {
+
+      console.log("i am in verify otp");
+      MyServices.verifyOtp($scope.forgot.otp, $scope.uniqueId, $scope.forgot.email).then(function (param) {
+        console.log(param);
+        $scope.enterotp = false;
+        $scope.showresetpassword = true;
+      }).catch(function (fallback) {
+        resendOtp();
       });
 
     }
-    var resendOtp=function(){
-     
+    var resendOtp = function () {
+
       console.log("i am in resend otp");
       MyServices.getOtp($scope.forgot.email).then(function (param) {
         console.log('OTP is sent');
-        
-        $scope.uniqueId=param.data.unique_id;
-        console.log( $scope.uniqueId);
-         $scope.enterotp=true;
-       }).catch(function (fallback) {
+
+        $scope.uniqueId = param.data.unique_id;
+        console.log($scope.uniqueId);
+        $scope.enterotp = true;
+      }).catch(function (fallback) {
         console.log('OTP is not sent');
         console.log(fallback);
       });
 
     }
-    var stopTimer=function(){
-      stoptimer=true;
-      $scope.forgot.otp="";
-     $scope.buttonname="Resend OTP";
+    var stopTimer = function () {
+      stoptimer = true;
+      $scope.forgot.otp = "";
+      $scope.buttonname = "Resend OTP";
       // $scope.checkForOtp();
       console.log("I am called");
       $interval.cancel(intervalfunction);
     }
-    var setTimer=function(){
-     // console.log("i am called");
-           if($scope.sec==0 )  
-           {        
-            
-             if($scope.min>0) 
-             {
-             $scope.sec=60;                                                                                         $scope.min--;
-             }
-             else
-             stopTimer();    
-           
-              }
-         
-           if(!stoptimer)
-           $scope.sec--;
+    var setTimer = function () {
+      // console.log("i am called");
+      if ($scope.sec == 0) {
+
+        if ($scope.min > 0) {
+          $scope.sec = 60; $scope.min--;
+        }
+        else
+          stopTimer();
+
+      }
+
+      if (!stoptimer)
+        $scope.sec--;
 
     }
-    var intervalfunction=$interval(setTimer, 1000);
+    var intervalfunction = $interval(setTimer, 1000);
 
 
     $scope.generateOtp = function () {
@@ -268,11 +288,39 @@ angular.module('starter.controllers', [])
 
       } else
         $scope.emailrequired = true;
-    
+
     }
+
+    //Reset password function
+    $scope.resetPassword=function(){
+      console.log("reset function called !");
+      if($scope.new.password || $scope.new.confirmpassword)
+      {
+        if($scope.new.password==$scope.new.confirmpassword)
+        {
+          ///password/reset
+          MyServices.resetPassword($scope.new).then(function(params){
+              //STORE TOKEN HERE 
+              $.jStorage.set('token',params.data.token);
+              //REDIRECT TO PRODUCT PAGE
+              $location.path('app/product');
+          }).catch(function(fallback){
+
+          });
+        }
+        else
+        {
+          $scope.new.password="";
+          $scope.new.confirmpassword="";
+        }
+      }
+
+    }
+
   })
 
-  .controller('productCtrl', function ($scope, $location, MyServices, $stateParams) {
+  .controller('productCtrl', function ($scope, $location, MyServices, $stateParams, $rootScope) {
+    console.log($rootScope.showblockeddiv);
     $scope.products = {};
     $scope.products.quantity = 0;
     $scope.products = [];
@@ -291,16 +339,19 @@ angular.module('starter.controllers', [])
   })
 
 
-  .controller('productdetailsCtrl', function ($scope, $stateParams) {
+  .controller('productdetailsCtrl', function ($scope, $stateParams, MyServices, $location) {
     $scope.productdetails = {};
+    $scope.products = {};
     var id = $stateParams.id;
-
+    $scope.products.quantity = 1;
     $scope.productdetails = product[id];
     $scope.placeOrder = function () {
       console.log($scope.products.quantity);
       MyServices.orderProducts(product[id].id, $scope.products.quantity).then(function (param) {
         console.log(param);
-
+        $location.path('app/history');
+      }).catch(function (fallback) {
+        console.log(fallback);
       });
     }
   })

@@ -7,7 +7,7 @@
   </ion-header-bar>
   <ion-content>
     <div class="row">
-      <form name="myform" class="col s12" ng-show="!showAddressPage">
+      <form name="myform" class="col s12" ng-show="!$root.redirectedtofilladdress">
         <div class="row">
           <div class="input-field col s6">
             <input name="username" id="name" type="text" ng-model="retailer.name" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters">
@@ -66,7 +66,7 @@
         </div>
       </form>
     </div>
-    <form ng-show="showAddressPage">
+    <form ng-show="$root.redirectedtofilladdress">
       <div class="row">
         <div class="input-field col s6">
           <textarea name="username" id="name" ng-model="retailer.address" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters"></textarea>
@@ -81,14 +81,14 @@
 
         </div>
         <div class="input-field col s6">
-          <input id="email" name="emailaddress" ng-model="retailer.pincode" type="email" class="validate" required="">
+          <input id="email" name="emailaddress" ng-model="retailer.pincode" type="text" class="validate" required="">
           <label for="email" data-error="Invalid address" data-success="right">Pincode</label>
           <!-- <span ng-if=myform.emailaddress.$error.email >Invalid Email address</span> -->
           <!-- <span ng-if=myform.emailaddress.$error.required >Email is required</span> -->
         </div>
       </div>
       <div class="row">
-        <div class="input-field col s12 text-center">
+        <div class="input-field col s12 text-center map-container">
           <input id="pac-input" class="controls" type="text" placeholder="Search Box" ng-model="location.input">
           
           <div id="map"></div>
