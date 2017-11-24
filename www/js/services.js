@@ -1,5 +1,6 @@
 
-var baseUrl = "http://localhost:8000/api/";
+var baseUrl = "http://192.168.0.112:8000/api/";
+//var baseUrl="http://localhost:8000/api/";
 var myservices = angular.module('myservices', [])
 
 
@@ -138,7 +139,9 @@ var myservices = angular.module('myservices', [])
 
             },
             insertAddress: function (retailerdata) {
-                var senddata = { 'address': retailerdata.address, 'pincode': retailerdata.pincode, 'city': retailerdata.city, 'latitude': retailerdata.lat.toString(), 'longitude': retailerdata.lng.toString(), 'landmark': "wait for 1 day" }
+
+                var senddata = { 'address': retailerdata.address, 'pincode': retailerdata.pincode, 'city': retailerdata.city, 'latitude': retailerdata.lat.toString(), 'longitude': retailerdata.lng.toString(), 'landmark': "wait for 1 day" };
+                
                 return $http({
                     url: baseUrl + "retailer/address/add",
                     method: 'POST',
@@ -211,6 +214,19 @@ var myservices = angular.module('myservices', [])
                     console.log(response);
                 });
 
+            },
+            getAreas:function(){
+                return $http({
+                    url: baseUrl + 'areas',
+                    method: 'GET',
+                    
+
+                }).success(function (response) {
+                    console.log(response);
+
+                }).error(function (response) {
+                    console.log(response);
+                });
             }
 
 

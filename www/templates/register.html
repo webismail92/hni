@@ -76,21 +76,36 @@
       </div>
       <div class="row">
         <div class="input-field col s6">
-          <input name="username" id="name" type="text" ng-model="retailer.city" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters">
+          <input type="text" ng-model="retailer.city" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters">
           <label for="name" data-error="wrong" data-success="right">City</label>
 
         </div>
         <div class="input-field col s6">
-          <input id="email" name="emailaddress" ng-model="retailer.pincode" type="text" class="validate" required="">
+          <input ng-model="retailer.pincode" type="text" class="validate" required="">
           <label for="email" data-error="Invalid address" data-success="right">Pincode</label>
           <!-- <span ng-if=myform.emailaddress.$error.email >Invalid Email address</span> -->
           <!-- <span ng-if=myform.emailaddress.$error.required >Email is required</span> -->
         </div>
       </div>
       <div class="row">
+        <div class="input-field col s6">
+              <select>
+                  <option value="volvo">Volvo</option>
+                  <option value="saab">Saab</option>
+                  <option value="mercedes">Mercedes</option>
+                  <option value="audi">Audi</option>
+                </select>
+            <!-- <option ng-repeat="area in areas ">{{area.line}}</option> -->
+        </div>
+
+        <div class="input-field col s6"></div>
+
+      </div>
+
+      <div class="row">
         <div class="input-field col s12 text-center map-container">
           <input id="pac-input" class="controls" type="text" placeholder="Search Box" ng-model="location.input">
-          
+
           <div id="map"></div>
         </div>
       </div>
@@ -101,7 +116,12 @@
           </button>
         </div>
       </div>
-
     </form>
+    
   </ion-content>
 </ion-view>
+<!-- <script>
+    $(document).ready(function(){
+     
+    });
+  </script> -->

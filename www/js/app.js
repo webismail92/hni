@@ -130,5 +130,5 @@ angular.module('starter', ['ionic', 'starter.controllers','myservices','ngCordov
       
       ;
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/product');
+    $urlRouterProvider.otherwise('/app/login');
   });

@@ -12,6 +12,7 @@ angular.module('starter.controllers', [])
 
     //check user logged in 
     // MyServices.logOut();
+    $scope.errors = {};
     $rootScope.redirectedtofilladdress = false;
     if ($.jStorage.get('token')) {
       //make request on details 
@@ -27,6 +28,7 @@ angular.module('starter.controllers', [])
             console.log(fallback.data.address);
             $location.path('app/register');
             $rootScope.redirectedtofilladdress = true;
+          
 
 
           } else if (fallback.data.blocked) {
@@ -46,7 +48,7 @@ angular.module('starter.controllers', [])
         $.jStorage.flush();
         $location.path('app/login');
       }).catch(function (fallback) {
-
+        $scope.errors = fallback.data;
       });
 
     }
@@ -56,7 +58,11 @@ angular.module('starter.controllers', [])
   })
 
   .controller('registerCtrl', function ($scope, $http, MyServices, $location, $cordovaGeolocation, $rootScope) {
+   
+    
+    $('select').material_select(); 
     //console.log($scope.myform.username);
+    $scope.errors = {};
     var infowindow;
     $scope.retailer = {};
     $scope.retailer.name = "jyoti";
@@ -73,7 +79,13 @@ angular.module('starter.controllers', [])
     $scope.retailer.lat = 0;
     $scope.retailer.lng = 0;
     $scope.passwordnotmatch = false;
+    $scope.areas=[];
+    MyServices.getAreas().then(function (params) { 
+      $scope.areas=params.data.areas;
+      console.log($scope.areas);
+    }).catch(function (fallback) { 
 
+    });
     var previousmarker = {};
     var getMap = function () {
       console.log("method getMap called");
@@ -163,16 +175,19 @@ angular.module('starter.controllers', [])
 
         // $location.path('app/product');
       }).catch(function (fallback) {
+        $scope.errors = fallback.data;
         console.log("i am in fallback");
         console.log(fallback);
       });
     }
     $scope.register = function () {
       console.log("registered function called !");
+
       MyServices.insertAddress($scope.retailer).then(function (param) {
         $location.path('app/product');
         console.log(param);
       }).catch(function (fallback) {
+        $scope.errors = fallback.data;
         console.log(fallback);
       });
 
@@ -183,6 +198,7 @@ angular.module('starter.controllers', [])
   })
 
   .controller('loginCtrl', function ($scope, MyServices, $location, $interval) {
+    $scope.errors = {};
     $scope.retailer = {};
     $scope.retailer.email = "jyoti@gmail.com";
     $scope.retailer.password = "jyoti";
@@ -191,9 +207,9 @@ angular.module('starter.controllers', [])
     $scope.forgot.email = "";
     $scope.enterotp = false;
     $scope.showresetpassword = true;
-    $scope.new={};
-    $scope.new.password="";
-    $scope.new.confirmpassword="";
+    $scope.new = {};
+    $scope.new.password = "";
+    $scope.new.confirmpassword = "";
 
     $scope.buttonname = "Verify";
 
@@ -213,6 +229,7 @@ angular.module('starter.controllers', [])
         $location.path('app/product');
         console.log(param);
       }).catch(function (fallback) {
+        $scope.errors = fallback.data;
         console.log(fallback);
       });
     }
@@ -250,6 +267,7 @@ angular.module('starter.controllers', [])
       }).catch(function (fallback) {
         console.log('OTP is not sent');
         console.log(fallback);
+        $scope.errors = fallback.data;
       });
 
     }
@@ -292,26 +310,23 @@ angular.module('starter.controllers', [])
     }
 
     //Reset password function
-    $scope.resetPassword=function(){
+    $scope.resetPassword = function () {
       console.log("reset function called !");
-      if($scope.new.password || $scope.new.confirmpassword)
-      {
-        if($scope.new.password==$scope.new.confirmpassword)
-        {
+      if ($scope.new.password || $scope.new.confirmpassword) {
+        if ($scope.new.password == $scope.new.confirmpassword) {
           ///password/reset
-          MyServices.resetPassword($scope.new).then(function(params){
-              //STORE TOKEN HERE 
-              $.jStorage.set('token',params.data.token);
-              //REDIRECT TO PRODUCT PAGE
-              $location.path('app/product');
-          }).catch(function(fallback){
-
+          MyServices.resetPassword($scope.new).then(function (params) {
+            //STORE TOKEN HERE 
+            $.jStorage.set('token', params.data.token);
+            //REDIRECT TO PRODUCT PAGE
+            $location.path('app/product');
+          }).catch(function (fallback) {
+            $scope.errors = fallback.data;
           });
         }
-        else
-        {
-          $scope.new.password="";
-          $scope.new.confirmpassword="";
+        else {
+          $scope.new.password = "";
+          $scope.new.confirmpassword = "";
         }
       }
 
@@ -320,6 +335,7 @@ angular.module('starter.controllers', [])
   })
 
   .controller('productCtrl', function ($scope, $location, MyServices, $stateParams, $rootScope) {
+
     console.log($rootScope.showblockeddiv);
     $scope.products = {};
     $scope.products.quantity = 0;
@@ -340,6 +356,7 @@ angular.module('starter.controllers', [])
 
 
   .controller('productdetailsCtrl', function ($scope, $stateParams, MyServices, $location) {
+    $scope.errors = {};
     $scope.productdetails = {};
     $scope.products = {};
     var id = $stateParams.id;
@@ -351,6 +368,7 @@ angular.module('starter.controllers', [])
         console.log(param);
         $location.path('app/history');
       }).catch(function (fallback) {
+        $scope.error = fallback.data;
         console.log(fallback);
       });
     }
