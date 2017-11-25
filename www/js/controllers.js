@@ -28,7 +28,7 @@ angular.module('starter.controllers', [])
             console.log(fallback.data.address);
             $location.path('app/register');
             $rootScope.redirectedtofilladdress = true;
-          
+
 
 
           } else if (fallback.data.blocked) {
@@ -57,13 +57,14 @@ angular.module('starter.controllers', [])
 
   })
 
-  .controller('registerCtrl', function ($scope, $http, MyServices, $location, $cordovaGeolocation, $rootScope) {
-   
-    
-    $('select').material_select(); 
+  .controller('registerCtrl', function ($scope, $http, MyServices, $location, $cordovaGeolocation, $rootScope, $timeout, $interval) {
+
+
+
     //console.log($scope.myform.username);
     $scope.errors = {};
     var infowindow;
+    $scope.ret = {};
     $scope.retailer = {};
     $scope.retailer.name = "jyoti";
     $scope.retailer.email = "jyoti@gmail.com";
@@ -78,18 +79,43 @@ angular.module('starter.controllers', [])
     $scope.retailer.city = "";
     $scope.retailer.lat = 0;
     $scope.retailer.lng = 0;
+    $scope.retailer.landmark = "";
+    $scope.ret.zone = "";
+    $scope.retailer.neareststn = "";
+
     $scope.passwordnotmatch = false;
-    $scope.areas=[];
-    MyServices.getAreas().then(function (params) { 
-      $scope.areas=params.data.areas;
+
+    $scope.areas = [];
+    $scope.areastation = [];
+
+
+    MyServices.getAreas().then(function (params) {
+      $scope.areas = params.data.areas;
       console.log($scope.areas);
-    }).catch(function (fallback) { 
+    }).catch(function (fallback) {
 
     });
-    var previousmarker = {};
+    var previousmarker;
+    var getPlace = function (id) {
+      console.log(id);
+      var service = new google.maps.places.PlacesService($scope.map);
+      service.getDetails({placeId: id}, callback);
+      
+      function callback(place, status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+        $scope.retailer.landmark=place.name;
+        }
+        else
+        console.log(status);
+      }
+     
+    }
     var getMap = function () {
       console.log("method getMap called");
-      var options = { timeout: 10000, enableHighAccuracy: true };
+      var options = {
+        timeout: 10000,
+        enableHighAccuracy: true
+      };
 
       $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
 
@@ -100,12 +126,16 @@ angular.module('starter.controllers', [])
           zoom: 15,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        var pyrmont = { lat: position.coords.latitude, lng: position.coords.longitude };
+        var pyrmont = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
         $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
         google.maps.event.addListener($scope.map, 'click', function (event) {
           $scope.retailer.lat = event.latLng.lat();
           $scope.retailer.lng = event.latLng.lng();
-          console.log(event.latLng);
+          getPlace(event.placeId);
+          console.log(event.placeId);
           createMarker(event.latLng);
 
         });
@@ -115,10 +145,12 @@ angular.module('starter.controllers', [])
         var searchBox = new google.maps.places.SearchBox(input);
         searchBox.addListener('places_changed', function () {
           var places = searchBox.getPlaces();
-          console.log($scope.map);
+          console.log(places);
+
           $scope.retailer.lat = places[0].geometry.location.lat();
           $scope.retailer.lng = places[0].geometry.location.lng();
-
+          console.log();
+         $scope.retailer.landmark=places[0].name;
           latLng = new google.maps.LatLng(places[0].geometry.location.lat(), places[0].geometry.location.lng());
           mapOptions = {
             center: latLng,
@@ -147,6 +179,10 @@ angular.module('starter.controllers', [])
 
 
     function createMarker(place) {
+
+      if (previousmarker)
+        previousmarker.setMap(null);
+      console.log(previousmarker);
       //var placeLoc = place.geometry.location;
       // infowindow.close();
       var marker = new google.maps.Marker({
@@ -161,7 +197,7 @@ angular.module('starter.controllers', [])
 
     }
 
-    getMap();
+    ionic.Platform.ready(getMap);
     $scope.callfunction = function () {
       console.log("i am in controller");
       MyServices.insertUser($scope.retailer).then(function (param) {
@@ -238,8 +274,7 @@ angular.module('starter.controllers', [])
       if ($scope.forgot.otp) {
         stopTimer();
         verifyOtp();
-      }
-      else {
+      } else {
         resendOtp();
       }
     }
@@ -284,9 +319,9 @@ angular.module('starter.controllers', [])
       if ($scope.sec == 0) {
 
         if ($scope.min > 0) {
-          $scope.sec = 60; $scope.min--;
-        }
-        else
+          $scope.sec = 60;
+          $scope.min--;
+        } else
           stopTimer();
 
       }
@@ -323,8 +358,7 @@ angular.module('starter.controllers', [])
           }).catch(function (fallback) {
             $scope.errors = fallback.data;
           });
-        }
-        else {
+        } else {
           $scope.new.password = "";
           $scope.new.confirmpassword = "";
         }
@@ -375,17 +409,32 @@ angular.module('starter.controllers', [])
   })
 
 
-  .controller('historyCtrl', function ($scope, MyServices) {
+  .controller('historyCtrl', function ($scope, MyServices, $cordovaToast) {
     $scope.orderhistory = [];
     MyServices.getOrderHistory().then(function (param) {
+      console.log('in history page');
       $scope.orderhistory = param.data.orders;
 
-      console.log(param.data.orders);
+      console.log( $scope.history);
     });
     $scope.cancelorder = function (index) {
-      MyServices.cancelOrder($scope.orderhistory[index].id);
+      console.log(index);
+      MyServices.cancelOrder($scope.orderhistory[index].id).then(function(params){
+
+      }).catch(function(fallback){
+        $cordovaToast.showLongBottom(fallback.error).then(function(success) {
+          // success
+          console.log(success);
+        }, function (error) {
+          // error
+          console.log(error);
+        });
+      });
+    }
+    $scope.callfunction=function(datetime){
+      return (new Date(datetime)).toLocaleDateString();//+"    "+ (new Date(datetime)).toLocaleTimeString();
     }
 
   })
 
-  .controller('PlaylistCtrl', function ($scope, $stateParams) { });
+  .controller('PlaylistCtrl', function ($scope, $stateParams) {});

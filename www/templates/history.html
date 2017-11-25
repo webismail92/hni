@@ -1,20 +1,23 @@
 <ion-view class="body-img2">
   <ion-header-bar>
-    <h1 class="title">Product</h1>
+    <h1 class="title">Orders</h1>
     <div class="buttons">
       <!-- <button class="button button-clear" ng-click="closeProduct()">Close</button> -->
     </div>
   </ion-header-bar>
   <ion-content>
 
-    <div class="pro-content row mb0">
+    <div class="pro-content row mb0" ng-repeat="history in orderhistory">
       <div class="c-col col s12">
         <div class="card horizontal c-mb0">
           <div class="card-stacked border-left">
             <div class="card-content">
               <div class="row pb0">
-                <div class="col s12">
+                <div class="col s6">
                   <p>{{history.name}}</p>
+                </div>
+                <div class="col s6">
+              <span class="badge badge-cus red ">{{history.status}}</span>
                 </div>
               </div>
               <div class="row pb0">
@@ -30,16 +33,15 @@
                   <p>Price : &#8377; {{history.price}}</p>
                 </div>
                 <div class="col s6">
-                  <p>status :
-                    <span class="badge badge-cus red ">{{history.status}}</span>
-                  </p>
+                  <p >Date : {{callfunction(history.created_at)}}</p>
                 </div>
               </div>
               <div class="row pb0">
                 <div class="col s6"></div>
                 <div class="col s6">
-                  <p>Date : {{history.created_at}}</p>
+                  <button ng-click="cancelorder($index)" class="btn btn-success" ng-if="history.status=='pending' || history.status=='delivered'">cancel</button>
                 </div>
+               
               </div>
             </div>
           </div>

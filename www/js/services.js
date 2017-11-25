@@ -83,7 +83,7 @@ var myservices = angular.module('myservices', [])
             },
             cancelOrder: function (id) {
                 return $http({
-                    url: baseUrl + "cancel-order/" + id,
+                    url: baseUrl + "retailer/cancel-order/" + id,
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -140,8 +140,8 @@ var myservices = angular.module('myservices', [])
             },
             insertAddress: function (retailerdata) {
 
-                var senddata = { 'address': retailerdata.address, 'pincode': retailerdata.pincode, 'city': retailerdata.city, 'latitude': retailerdata.lat.toString(), 'longitude': retailerdata.lng.toString(), 'landmark': "wait for 1 day" };
-                
+                var senddata = { 'address': retailerdata.address, 'pincode': retailerdata.pincode, 'city': retailerdata.city, 'latitude': retailerdata.lat.toString(), 'longitude': retailerdata.lng.toString(), 'landmark': retailerdata.landmark,'area':retailerdata.neareststn };
+                console.log(senddata);
                 return $http({
                     url: baseUrl + "retailer/address/add",
                     method: 'POST',
