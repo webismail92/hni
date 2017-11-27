@@ -6,8 +6,8 @@
     </div>
   </ion-header-bar>
   <ion-content>
-
-    <div class="pro-content row mb0" ng-repeat="history in orderhistory">
+    <ion-spinner class="spinner-energized" ng-if="showspinner"></ion-spinner>
+    <div class="pro-content row mb0" ng-repeat="history in orderhistory" on-swipe-down="onSwipeDown()">
       <div class="c-col col s12">
         <div class="card horizontal c-mb0">
           <div class="card-stacked border-left">
@@ -39,9 +39,10 @@
               <div class="row pb0">
                 <div class="col s6"></div>
                 <div class="col s6">
-                  <button ng-click="cancelorder($index)" class="btn btn-success" ng-if="history.status=='pending' || history.status=='delivered'">cancel</button>
+                  <button ng-click="cancelorder($index)" class="btn btn-success" ng-if="history.status!='cancelled' && history.status!='delivered'">cancel</button>
                 </div>
-               
+                
+                <!--  -->
               </div>
             </div>
           </div>

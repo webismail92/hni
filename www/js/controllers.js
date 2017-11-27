@@ -409,18 +409,28 @@ angular.module('starter.controllers', [])
   })
 
 
-  .controller('historyCtrl', function ($scope, MyServices, $cordovaToast) {
+  .controller('historyCtrl', function ($scope, MyServices, $cordovaToast,$interval) {
     $scope.orderhistory = [];
+   console.log('history ctrl');
+   var getOrders=function(){
     MyServices.getOrderHistory().then(function (param) {
       console.log('in history page');
       $scope.orderhistory = param.data.orders;
-
-      console.log( $scope.history);
+      $scope.showspinner=false;
+      console.log( $scope.orderhistory);
     });
+  } 
+   $scope.onSwipeDown=function(){
+     $scope.showspinner=true;
+      $interval (getOrders,1000,1);
+   }
+   getOrders();
     $scope.cancelorder = function (index) {
       console.log(index);
       MyServices.cancelOrder($scope.orderhistory[index].id).then(function(params){
-
+       // getOrders();
+      if(params.data.status)
+      $scope.orderhistory[index].status='cancelled'
       }).catch(function(fallback){
         $cordovaToast.showLongBottom(fallback.error).then(function(success) {
           // success

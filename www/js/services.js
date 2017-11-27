@@ -67,16 +67,21 @@ var myservices = angular.module('myservices', [])
 
 
             getOrderHistory: function () {
+                console.log('getOrderHistory  '+$.jStorage.get('token'));
                 return $http({
-                    url: baseUrl + "demo",
+                    url: baseUrl + "retailer/orders/history",
                     method: 'GET',
-
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: 'Bearer ' + $.jStorage.get('token')
+                    }
 
 
                 }).success(function (response) {
-
+                    console.log('in success');
+                    console.log(response);
                 }).error(function (response) {
-
+                    console.log(response);
                 });
 
 
@@ -87,7 +92,7 @@ var myservices = angular.module('myservices', [])
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
-                        Authorization: 'bearer ' + $.jStorage.get('token')
+                        Authorization: 'Bearer ' + $.jStorage.get('token')
                     }
 
                 }).success(function (response) {
