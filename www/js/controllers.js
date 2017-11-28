@@ -1,7 +1,7 @@
 var product = [];
 angular.module('starter.controllers', [])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, MyServices, $location, $rootScope) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, MyServices, $location, $rootScope,$cordovaNetwork) {
 
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
@@ -9,9 +9,29 @@ angular.module('starter.controllers', [])
     // listen for the $ionicView.enter event:
     //$scope.$on('$ionicView.enter', function(e) {
     //});
-
+    //Check internet connection
+    ionic.Platform.ready(function() {
+     var type = $cordovaNetwork.getNetwork()
+     
+    //  $scope.isonline = $cordovaNetwork.isOnline();
+     console.log(type);
+      window.alert(type);
+    });
     //check user logged in 
-    // MyServices.logOut();
+    // listen for Online event
+    $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
+      alert('called online');
+      var onlineState = networkState;
+    });
+
+    // listen for Offline event
+    $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
+      alert('called online');
+      var offlineState = networkState;
+    
+    });
+
+var checkfortoken=function(){
     $scope.errors = {};
     $rootScope.redirectedtofilladdress = false;
     if ($.jStorage.get('token')) {
@@ -42,6 +62,7 @@ angular.module('starter.controllers', [])
 
 
     }
+  };
     $scope.logOut = function () {
       console.log("log out function called !");
       MyServices.logOut().then(function (params) {
