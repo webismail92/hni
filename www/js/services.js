@@ -117,10 +117,11 @@ var myservices = angular.module('myservices', [])
 
 
             },
-            orderProducts: function (id, qty) {
+            orderProducts: function (id, products) {
                 var orderdetail = {
                     'product_id': id,
-                    'quantity': qty,
+                    'quantity': products.quantity,
+                    'salesman_id':products.salesid
 
                 };
 
@@ -199,9 +200,9 @@ var myservices = angular.module('myservices', [])
                         Authorization: 'Bearer ' + $.jStorage.get('token')
                     }
                 }).success(function (response) {
-
-                }).error(function (response) {
-
+                    console.log(response);
+                }).error(function (error) {
+                    console.log(error);
                 })
 
 

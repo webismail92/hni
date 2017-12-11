@@ -1,0 +1,78 @@
+<ion-view class="body-img2" view-title="My Profile">
+  <ion-content>
+    <!-- <div class="avtar"> 
+     <img src="img/bg2.jpg" height="200" width="200" class="circle ">
+    </div> -->
+    <div >
+    <div class="avtar text-center mrtp25">
+      <i class="material-icons usericon">account_circle</i>
+      <div>
+        <span class="heading1">{{retailersdata.name|initCap}}</span>
+      </div>
+    </div>
+    <div class="mrtp25 text-left">
+      <div class="heading2">Contact Info </div>
+      <div class=" mrtp10">
+        <span class="heading3">Email :</span>
+        <span class="heading3">{{retailersdata.email}}</span>
+      </div>
+      <div class=" mrtp5">
+        <span class="heading3">Contact :</span>
+        <span class="heading3">{{retailersdata.contact}}</span>
+      </div>
+    </div>
+    <div class="mrtp25 text-left">
+      <div class="heading2">Shop Info </div>
+      <div class=" mrtp10">
+        <span class="heading3">Shop name :</span>
+        <span class="heading3">{{retailersdata.shopname|initCap}}</span>
+      </div>
+      <div class=" mrtp5">
+        <span class="heading3">Address :</span>
+        <span class="heading3">{{retailersdata.address.address|initCap}}</span>
+      </div>
+      <div class=" mrtp5">
+        <span class="heading3">City :</span>
+        <span class="heading3">{{retailersdata.address.city|initCap}}</span>
+      </div>
+      <div class=" mrtp5">
+        <span class="heading3">Landmark :</span>
+        <span class="heading3">{{retailersdata.address.landmark|initCap}}</span>
+      </div>
+      <div class=" mrtp5">
+        <span class="heading3">pincode :</span>
+        <span class="heading3">{{retailersdata.address.pincode}}</span>
+      </div>
+    </div>
+    <div class="mrtp25 text-left">
+      <div class="heading2">Government proof</div>
+      <div class=" mrtp10">
+        <span class="heading3">Pan :</span>
+        <span class="heading3">{{retailersdata.pan}}</span>
+      </div>
+      <div class=" mrtp5">
+        <span class="heading3">GST :</span>
+        <span class="heading3">{{retailersdata.gstin?retailersdata.gstin:'NA'}}</span>
+      </div>
+    </div>
+</div>
+
+    <!-- <div ng-if="$root.showblockeddiv" class="mrtp40">
+        <div class="col s12 m7">
+          <div class="card horizontal">
+            <div class="card-stacked">
+              <div class="card-content text-center">
+                <h4>Your account has been blocked !</h4>
+                <p class="text-justify">Your account is being blocked because you've not provided the payment. Kindly complete the payment. If you've
+                  already paid then click the button below or contact support.
+                 Your id is {{$root.id}}&nbsp; in case you need to contact support.</p>
+                <a class="btn-floating halfway-fab waves-effect waves-light btn red darken-3 z-depth-3 pos" ng-click="getStatus()">
+                  <i class="material-icons rotateicon">refresh</i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+  </ion-content>
+</ion-view>

@@ -1,22 +1,27 @@
-<ion-view class="body-img1">
-  <ion-header-bar>
+<ion-view class="body-img1"  hide-nav-bar="true">
+  <!-- <ion-header-bar>
     <h1 class="title">Register</h1>
     <div class="buttons">
       <button class="button button-clear" ng-click="closeRegister()">Close</button>
     </div>
-  </ion-header-bar>
+  </ion-header-bar> -->
   <ion-content>
-    <div class="row">
+    <div class="row ">
       <form name="myform" class="col s12" ng-show="!$root.redirectedtofilladdress">
+          <div class="row pd35 fontstyle">
+              <div class=" col s12  text-center  ">Register yourself</div>
+                    <!-- <img src="img/logo.png" class="logo responsive-img body-img1" alt=""> -->
+                  </div>
         <div class="row">
           <div class="input-field col s6">
             <input name="username" id="name" type="text" ng-model="retailer.name" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters">
-            <label for="name" data-error="wrong" data-success="right">Full Name</label>
-
+            <label for="name" data-error="wrong" data-success="right" ng-class="{active:retailer.name}">Full Name</label>
+            <span ng-bind="errors.name"  class="errormessage"></span>
           </div>
           <div class="input-field col s6">
             <input id="email" name="emailaddress" ng-model="retailer.email" type="email" class="validate" required="">
-            <label for="email" data-error="Invalid address" data-success="right">Email</label>
+            <label for="email" data-error="Invalid address" data-success="right" ng-class="{active:retailer.email}">Email</label>
+            <span ng-bind="errors.email" class="errormessage"></span>
             <!-- <span ng-if=myform.emailaddress.$error.email >Invalid Email address</span> -->
             <!-- <span ng-if=myform.emailaddress.$error.required >Email is required</span> -->
           </div>
@@ -24,44 +29,53 @@
         <div class="row">
           <div class="input-field col s6">
             <input id="password" ng-model="retailer.password" type="password" class="validate" required="">
-            <label for="password" data-error="wrong" data-success="right">Password</label>
+            <label for="password" data-error="wrong" data-success="right" ng-class="{active:retailer.password}">Password</label>
+            <span ng-bind="errors.password" class="errormessage"></span>
           </div>
           <div class="input-field col s6">
-            <input id="c_password" type="password" ng-change=passwordnotmatch=false ng-model="retailer.c_password" class="validate" required="">
-            <label for="c_password" data-error="wrong" data-success="right">Confirm Password</label>
-            <span ng-if=passwordnotmatch>password do not match</span>
+            <input id="c_password" type="password"  ng-model="retailer.c_password" class="validate" required="">
+            <label for="c_password" data-error="wrong" data-success="right" ng-class="{active:retailer.c_password}">Confirm Password</label>
+            <span ng-bind="errors.c_password" class="errormessage"></span>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s6">
             <input id="gstin" type="text" ng-model="retailer.gstin" class="validate" required="" pattern="[a-zA-Z0-9]{15}$">
-            <label for="gstin" data-error="wrong" data-success="right">GSTIN No.</label>
+            <label for="gstin" data-error="wrong" data-success="right" ng-class="{active:retailer.gstin}">GSTIN No.</label>
+            <span ng-bind="errors.gstin" class="errormessage"></span>
           </div>
+          <!-- <div class="input-field col s6">
+            <input id="pan" type="text" ng-model="retailer.pan" class="validate" required="" pattern="[a-zA-Z0-9]{10}$">
+            <label for="pan" data-error="wrong" data-success="right" ng-class="{active:retailer.pan}">PAN No.</label>
+            <span ng-bind="errors.pan" class="errormessage"></span>
+          </div> -->
           <div class="input-field col s6">
             <input id="pan" type="text" ng-model="retailer.pan" class="validate" required="" pattern="[a-zA-Z0-9]{10}$">
-            <label for="pan" data-error="wrong" data-success="right">PAN No.</label>
+            <label for="pan" data-error="wrong" data-success="right"  ng-class="{active:retailer.pan}">PAN No.</label>
+            <span ng-bind="errors.pan" class="errormessage"></span>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s6">
             <input id="shopname" type="text" ng-model="retailer.shopname" class="validate" required="">
-            <label for="shopname" data-error="wrong" data-success="right">Shop Name</label>
+            <label for="shopname" data-error="wrong" data-success="right" ng-class="{active:retailer.shopname}">Shop Name</label>
+            <span ng-bind="errors.shopname" class="errormessage"></span>
           </div>
           <div class="input-field col s6">
             <input id="contact" type="text" ng-model="retailer.contact" class="validate" required="">
-            <label for="contact" data-error="wrong" data-success="right">Contact No.</label>
+            <label for="contact" data-error="wrong" data-success="right" ng-class="{active:retailer.contact}">Contact No.</label>
+            <span ng-bind="errors.contact" class="errormessage"></span>
           </div>
         </div>
         <div class="row">
-          <div class="input-field col s12 text-center">
+          <div class="input-field col s12 text-right">
             <!-- <button class="btn-large waves-effect waves-light red lighten-1" ng-click="register()">Finish
               <!-- <i class="material-icons right">send</i>
             </button> -->
-            <a ng-click="callfunction()">
-              <span class="pull-right">Next &nbsp;
-                <i class="ion-chevron-right"></i>
-              </span>
-            </a>
+            <button class="waves-effect waves-light btn"  ng-click="callfunction()">
+             Next Step
+             <i class="material-icons right">navigate_next</i>
+            </button >
           </div>
         </div>
       </form>

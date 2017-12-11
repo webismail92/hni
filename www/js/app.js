@@ -33,7 +33,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'myservices', 'ngCord
       controller: 'AppCtrl'
     })
 
-
+    .state('app.profile', {
+      url: '/profile',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/profile.html',
+          controller: 'profileCtrl',
+         
+        }
+      }
+    })
 
 
 
@@ -47,6 +56,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'myservices', 'ngCord
         }
       }
     })
+
 
     .state('app.login', {
       url: '/login',
@@ -100,4 +110,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'myservices', 'ngCord
     ;
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/login');
-});
+})
+.filter('initCap' ,function(){
+ return function(value){
+   if(value){
+  return value.replace(value.charAt(0),value.substr(0,1).toUpperCase());
+   }
+  }
+})

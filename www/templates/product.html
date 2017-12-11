@@ -1,4 +1,4 @@
-<ion-view class="body-img2">
+<ion-view class="body-img2" view-title="Products" hide-back-button="true">
   <ion-header-bar>
     <h1 class="title">Products</h1>
     <div class="buttons">
@@ -6,26 +6,29 @@
     </div>
   </ion-header-bar>
   <ion-content>
-    <div class="pro-content row mb0">
+    <div class="pro-content row mb0" ng-if="!$root.showblockeddiv">
       <div class="c-col col s12">
-        <div ng-repeat="product in products track by $index">
-        <div class="card horizontal">
-          <div class="card-image">
-            <img ng-src="{{'http://192.168.0.112:8000/'+product.image.replace('public','thumb/storage')}}" class="img-responsive">
-          </div>
-          <div class="card-stacked border-left">
-            <div class="card-content">
-              <div class="row pb0">
-                <div class="col s12">
-                  <div class="pro">
-                    <p>{{product.name}}<span class="new badge" ng-if=product.featured>&nbsp;</span></p>
-                    <p>
-                      <span class="pull-left">{{product.volume}} </span>
-                      <span class="pull-right">&#8377; {{product.price}}</span>
-                    </p>
-                    <p class="last">
-                      <button ng-click="proToProDetail($index)" class="waves-effect waves-light btn red lighten-1 pull-right">View</button>
-                    </p>
+        <div ng-repeat="product in products track by $index" ng-class-odd="'righttoleft'" ng-class-even="'lefttoright'">
+          <div class="card horizontal">
+            <div class="card-image">
+              <img ng-src="{{'http://192.168.0.112:8000/'+product.image.replace('public','thumb/storage')}}" class="img-responsive">
+            </div>
+            <div class="card-stacked border-left">
+              <div class="card-content">
+                <div class="row pb0">
+                  <div class="col s12">
+                    <div class="pro">
+                      <p>{{product.name}}
+                        <span class="new badge" ng-if=product.featured>&nbsp;</span>
+                      </p>
+                      <p>
+                        <span class="pull-left">{{product.volume}}mL </span>
+                        <span class="pull-right">&#8377; {{product.price}}</span>
+                      </p>
+                      <p class="last">
+                        <button ng-click="proToProDetail($index)" class="waves-effect waves-light btn red darken-1 pull-right z-depth-1">View</button>
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -33,6 +36,22 @@
           </div>
         </div>
       </div>
+    </div>
+    <div ng-if="$root.showblockeddiv" class="mrtp40">
+      <div class="col s12 m7">
+        <div class="card horizontal">
+          <div class="card-stacked">
+            <div class="card-content text-center">
+              <h4>Your account has been blocked !</h4>
+              <p class="text-justify">Your account is being blocked because you've not provided the payment. Kindly complete the payment. If you've
+                already paid then click the button below or contact support.
+               Your id is {{$root.id}}&nbsp; in case you need to contact support.</p>
+              <a class="btn-floating halfway-fab waves-effect waves-light btn red darken-3 z-depth-3 pos" ng-click="getStatus()">
+                <i class="material-icons rotateicon">refresh</i>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- <div class="row mb10">

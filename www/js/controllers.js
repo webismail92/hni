@@ -1,7 +1,8 @@
 var product = [];
+var retailersdata = {};
 angular.module('starter.controllers', [])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, MyServices, $location, $rootScope,$cordovaNetwork) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, MyServices, $location, $rootScope, $cordovaNetwork, $ionicPopup) {
 
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
@@ -10,63 +11,98 @@ angular.module('starter.controllers', [])
     //$scope.$on('$ionicView.enter', function(e) {
     //});
     //Check internet connection
-    ionic.Platform.ready(function() {
-     var type = $cordovaNetwork.getNetwork()
+    /* ionic.Platform.ready(function() {
+      $scope.isonline = $cordovaNetwork.isOnline();
+      if(!$scope.isonline)
+      $location.path('app/errorpage');
      
-    //  $scope.isonline = $cordovaNetwork.isOnline();
-     console.log(type);
-      window.alert(type);
     });
     //check user logged in 
     // listen for Online event
     $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
       alert('called online');
-      var onlineState = networkState;
+     $scope.isonline= $cordovaNetwork.isOnline();
+     checkfortoken();
+
     });
 
     // listen for Offline event
     $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
-      alert('called online');
-      var offlineState = networkState;
+
+       $scope.isonline=$cordovaNetwork.isOnline();
+       $location.path();
     
-    });
+    }); */
+    $rootScope.id = $.jStorage.get('id');
+    var ischeckfunctioncalled = false;
+    var checkfortoken = function () {
+      console.log('check function called');
+      $scope.errors = {};
+      $rootScope.redirectedtofilladdress = false;
+      if ($.jStorage.get('token')) {
+        //make request on details 
+        MyServices.getDetails().then(function (params) {
 
-var checkfortoken=function(){
-    $scope.errors = {};
-    $rootScope.redirectedtofilladdress = false;
-    if ($.jStorage.get('token')) {
-      //make request on details 
-      MyServices.getDetails().then(function (params) {
-        console.log('i am in success');
-        console.log(params);
-        $location.path('app/product');
-      }).catch(function (fallback) {
-        console.log('i am in fallback')
-        console.log(fallback);
-        if (fallback.data) {
-          if (fallback.data.address) {
-            console.log(fallback.data.address);
-            $location.path('app/register');
-            $rootScope.redirectedtofilladdress = true;
-
-
-
-          } else if (fallback.data.blocked) {
-            console.log(fallback.data.blocked);
-            $location.path('app/product');
+          retailersdata = params.data.retailer;
+          if (retailersdata.blocked==1) {
             $rootScope.showblockeddiv = true;
           }
-        }
 
-      })
+          $location.path('app/product');
+        }).catch(function (fallback) {
+          console.log('i am in fallback')
+          console.log(fallback);
+          if (fallback.data) {
+            if (fallback.data.address) {
+              console.log(fallback.data.address);
+              $location.path('app/register');
+              $rootScope.redirectedtofilladdress = true;
 
 
+
+            } else if (fallback.data.error == "Unauthenticated.") {
+              $location.path('app/login');
+            }
+            
+            
+          }
+          else{
+            $location.path('app/login');
+          }
+
+        })
+
+
+      }
+    };
+
+
+    checkfortoken();
+    $scope.logoutconfirmation = function () {
+      $ionicPopup.show({
+        template: 'Are you sure want to exit app ?',
+        title: 'Confirmation',
+        scope: $scope,
+        buttons: [{
+            text: 'Cancel'
+          },
+          {
+            text: '<b>Yes</b>',
+            type: 'waves-effect waves-light btn red darken-1 ',
+            onTap: function (e) {
+              logout();
+            }
+          }
+        ]
+      });
     }
-  };
-    $scope.logOut = function () {
-      console.log("log out function called !");
+
+    var logout = function () {
+
       MyServices.logOut().then(function (params) {
+        console.log("log out function called !");
         $.jStorage.flush();
+        console.log($.jStorage.get('token'));
         $location.path('app/login');
       }).catch(function (fallback) {
         $scope.errors = fallback.data;
@@ -78,9 +114,11 @@ var checkfortoken=function(){
 
   })
 
-  .controller('registerCtrl', function ($scope, $http, MyServices, $location, $cordovaGeolocation, $rootScope, $timeout, $interval) {
+  .controller('registerCtrl', function ($scope, $http, MyServices, $location, $cordovaGeolocation, $rootScope, $timeout, $interval, $ionicLoading, $ionicSideMenuDelegate) {
 
-
+    $scope.$on('$ionicView.enter', function (e) {
+      $ionicSideMenuDelegate.canDragContent(false);
+    });
 
     //console.log($scope.myform.username);
     $scope.errors = {};
@@ -120,16 +158,17 @@ var checkfortoken=function(){
     var getPlace = function (id) {
       console.log(id);
       var service = new google.maps.places.PlacesService($scope.map);
-      service.getDetails({placeId: id}, callback);
-      
+      service.getDetails({
+        placeId: id
+      }, callback);
+
       function callback(place, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
-        $scope.retailer.landmark=place.name;
-        }
-        else
-        console.log(status);
+          $scope.retailer.landmark = place.name;
+        } else
+          console.log(status);
       }
-     
+
     }
     var getMap = function () {
       console.log("method getMap called");
@@ -171,7 +210,7 @@ var checkfortoken=function(){
           $scope.retailer.lat = places[0].geometry.location.lat();
           $scope.retailer.lng = places[0].geometry.location.lng();
           console.log();
-         $scope.retailer.landmark=places[0].name;
+          $scope.retailer.landmark = places[0].name;
           latLng = new google.maps.LatLng(places[0].geometry.location.lat(), places[0].geometry.location.lng());
           mapOptions = {
             center: latLng,
@@ -220,22 +259,27 @@ var checkfortoken=function(){
 
     ionic.Platform.ready(getMap);
     $scope.callfunction = function () {
-      console.log("i am in controller");
-      MyServices.insertUser($scope.retailer).then(function (param) {
-        console.log("i am in controller");
-        $.jStorage.flush();
-        $.jStorage.set('name', param.data.success.name);
-        $.jStorage.set('token', param.data.success.token);
-        $.jStorage.set('id', param.data.success.id);
-        console.log(param);
-        $rootScope.redirectedtofilladdress = true;
+      $ionicLoading.show({
+        template: 'Processing....',
+        duration: 500
+      }).then(function () {
+        MyServices.insertUser($scope.retailer).then(function (param) {
+          console.log("i am in controller");
+          $.jStorage.flush();
+          $.jStorage.set('name', param.data.success.name);
+          $.jStorage.set('token', param.data.success.token);
+          $.jStorage.set('id', param.data.success.id);
+          console.log(param);
+          $rootScope.redirectedtofilladdress = true;
 
-        // $location.path('app/product');
-      }).catch(function (fallback) {
-        $scope.errors = fallback.data;
-        console.log("i am in fallback");
-        console.log(fallback);
+          // $location.path('app/product');
+        }).catch(function (fallback) {
+          $scope.errors = fallback.data.error;
+
+        });
       });
+      console.log($scope.retailer);
+
     }
     $scope.register = function () {
       console.log("registered function called !");
@@ -245,6 +289,7 @@ var checkfortoken=function(){
         console.log(param);
       }).catch(function (fallback) {
         $scope.errors = fallback.data;
+
         console.log(fallback);
       });
 
@@ -254,7 +299,11 @@ var checkfortoken=function(){
     }
   })
 
-  .controller('loginCtrl', function ($scope, MyServices, $location, $interval) {
+  .controller('loginCtrl', function ($scope, MyServices, $location, $interval, $ionicSideMenuDelegate, $cordovaToast, $ionicLoading) {
+    $scope.$on('$ionicView.enter', function (e) {
+      $ionicSideMenuDelegate.canDragContent(false);
+    });
+
     $scope.errors = {};
     $scope.retailer = {};
     $scope.retailer.email = "jyoti@gmail.com";
@@ -263,20 +312,27 @@ var checkfortoken=function(){
     $scope.forgot = {};
     $scope.forgot.email = "";
     $scope.enterotp = false;
-    $scope.showresetpassword = true;
+    $scope.showresetpassword = false;
     $scope.new = {};
     $scope.new.password = "";
     $scope.new.confirmpassword = "";
 
     $scope.buttonname = "Verify";
 
-
+    var loading = function () {
+      $ionicLoading.show({
+        template: '<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"> <div class="circle"></div></div></div></div>'
+      }).then(function () {
+        console.log("The loading indicator is now displayed");
+      });
+    }
     var stoptimer = false;
     $scope.min = 2, $scope.sec = 00;
     $scope.registerPage = function () {
       $location.path('app/register');
     }
     $scope.doLogin = function () {
+      loading();
       console.log($scope.retailer.email);
       $.jStorage.flush();
       MyServices.doLogin($scope.retailer).then(function (param) {
@@ -285,9 +341,15 @@ var checkfortoken=function(){
         $.jStorage.set('id', param.data.success.retailer.id);
         $location.path('app/product');
         console.log(param);
+        $ionicLoading.hide();
+
       }).catch(function (fallback) {
-        $scope.errors = fallback.data;
-        console.log(fallback);
+        $scope.errors = fallback.data.error;
+        console.log($scope.errors);
+        Materialize.toast($scope.errors, 4000);
+        $ionicLoading.hide();
+
+
       });
     }
     $scope.checkForOtp = function () {
@@ -312,18 +374,20 @@ var checkfortoken=function(){
 
     }
     var resendOtp = function () {
-
+      loading();
       console.log("i am in resend otp");
       MyServices.getOtp($scope.forgot.email).then(function (param) {
         console.log('OTP is sent');
-
+        $ionicLoading.hide();
         $scope.uniqueId = param.data.unique_id;
         console.log($scope.uniqueId);
         $scope.enterotp = true;
       }).catch(function (fallback) {
         console.log('OTP is not sent');
         console.log(fallback);
-        $scope.errors = fallback.data;
+
+        $ionicLoading.hide();
+        Materialize.toast(fallback.data.error, 2000);
       });
 
     }
@@ -361,8 +425,9 @@ var checkfortoken=function(){
         resendOtp();
 
       } else
-        $scope.emailrequired = true;
 
+        $scope.errors.email = "Email is required !";
+      console.log($scope.errors.email);
     }
 
     //Reset password function
@@ -374,6 +439,7 @@ var checkfortoken=function(){
           MyServices.resetPassword($scope.new).then(function (params) {
             //STORE TOKEN HERE 
             $.jStorage.set('token', params.data.token);
+            Mater
             //REDIRECT TO PRODUCT PAGE
             $location.path('app/product');
           }).catch(function (fallback) {
@@ -390,17 +456,31 @@ var checkfortoken=function(){
   })
 
   .controller('productCtrl', function ($scope, $location, MyServices, $stateParams, $rootScope) {
+    $scope.$on('$ionicView.enter', function () {
 
-    console.log($rootScope.showblockeddiv);
-    $scope.products = {};
-    $scope.products.quantity = 0;
-    $scope.products = [];
-    // }
-    MyServices.getProducts().then(function (param) {
-      $scope.products = param.data.products;
-      product = $scope.products;
-      console.log($scope.products);
-    });
+    })
+    var getproducts = function () {
+      console.log($rootScope.showblockeddiv);
+      $scope.products = {};
+      $scope.products.quantity = 0;
+      $scope.products = [];
+      // }
+      MyServices.getProducts().then(function (param) {
+        $rootScope.showblockeddiv = false;
+        $scope.products = param.data.products;
+        product = $scope.products;
+        console.log($scope.products);
+      }).catch(function (fallback) {
+        if (fallback.data.error == "Unauthenticated.") {
+          $location.path('app/login');
+        } else if (fallback.data.blocked)
+          $rootScope.showblockeddiv = true;
+      });
+
+    }
+    $scope.getStatus = function () {
+      getproducts();
+    }
     $scope.proToProDetail = function (id) {
       console.log('called');
       $location.path("app/product-detail/" + id);
@@ -417,12 +497,16 @@ var checkfortoken=function(){
     var id = $stateParams.id;
     $scope.products.quantity = 1;
     $scope.productdetails = product[id];
+    $scope.products.salesid;
     $scope.placeOrder = function () {
       console.log($scope.products.quantity);
-      MyServices.orderProducts(product[id].id, $scope.products.quantity).then(function (param) {
+      MyServices.orderProducts(product[id].id, $scope.products).then(function (param) {
         console.log(param);
         $location.path('app/history');
       }).catch(function (fallback) {
+        if (fallback.data.error == "Unauthenticated.") {
+          $location.path('app/login');
+        }
         $scope.error = fallback.data;
         console.log(fallback);
       });
@@ -430,30 +514,34 @@ var checkfortoken=function(){
   })
 
 
-  .controller('historyCtrl', function ($scope, MyServices, $cordovaToast,$interval) {
+  .controller('historyCtrl', function ($scope, MyServices, $cordovaToast, $interval) {
     $scope.orderhistory = [];
-   console.log('history ctrl');
-   var getOrders=function(){
-    MyServices.getOrderHistory().then(function (param) {
-      console.log('in history page');
-      $scope.orderhistory = param.data.orders;
-      $scope.showspinner=false;
-      console.log( $scope.orderhistory);
-    });
-  } 
-   $scope.onSwipeDown=function(){
-     $scope.showspinner=true;
-      $interval (getOrders,1000,1);
-   }
-   getOrders();
+    console.log('history ctrl');
+    var getOrders = function () {
+      MyServices.getOrderHistory().then(function (param) {
+        console.log('in history page');
+        $scope.orderhistory = param.data.orders;
+        $scope.showspinner = false;
+        console.log($scope.orderhistory);
+      }).catch(function (fallback) {
+        if (fallback.data.error == "Unauthenticated.") {
+          $location.path('app/login');
+        }
+      });
+    }
+    $scope.onSwipeDown = function () {
+      $scope.showspinner = true;
+      $interval(getOrders, 1000, 1);
+    }
+    getOrders();
     $scope.cancelorder = function (index) {
       console.log(index);
-      MyServices.cancelOrder($scope.orderhistory[index].id).then(function(params){
-       // getOrders();
-      if(params.data.status)
-      $scope.orderhistory[index].status='cancelled'
-      }).catch(function(fallback){
-        $cordovaToast.showLongBottom(fallback.error).then(function(success) {
+      MyServices.cancelOrder($scope.orderhistory[index].id).then(function (params) {
+        // getOrders();
+        if (params.data.status)
+          $scope.orderhistory[index].status = 'cancelled'
+      }).catch(function (fallback) {
+        $cordovaToast.showLongBottom(fallback.error).then(function (success) {
           // success
           console.log(success);
         }, function (error) {
@@ -462,10 +550,15 @@ var checkfortoken=function(){
         });
       });
     }
-    $scope.callfunction=function(datetime){
-      return (new Date(datetime)).toLocaleDateString();//+"    "+ (new Date(datetime)).toLocaleTimeString();
+    $scope.callfunction = function (datetime) {
+      return (new Date(datetime)).toLocaleDateString(); //+"    "+ (new Date(datetime)).toLocaleTimeString();
     }
 
   })
 
-  .controller('PlaylistCtrl', function ($scope, $stateParams) {});
+  .controller('profileCtrl', function ($scope, $stateParams) {
+
+    $scope.retailersdata = retailersdata;
+
+
+  });
