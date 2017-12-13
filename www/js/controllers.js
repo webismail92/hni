@@ -41,14 +41,18 @@ angular.module('starter.controllers', [])
       $rootScope.redirectedtofilladdress = false;
       if ($.jStorage.get('token')) {
         //make request on details 
+
         MyServices.getDetails().then(function (params) {
 
           retailersdata = params.data.retailer;
-          if (retailersdata.blocked==1) {
+
+          if (retailersdata.blocked == 1) {
+
             $rootScope.showblockeddiv = true;
           }
 
           $location.path('app/product');
+          console.log('checking flow ', $rootScope.showblockeddiv);
         }).catch(function (fallback) {
           console.log('i am in fallback')
           console.log(fallback);
@@ -63,10 +67,9 @@ angular.module('starter.controllers', [])
             } else if (fallback.data.error == "Unauthenticated.") {
               $location.path('app/login');
             }
-            
-            
-          }
-          else{
+
+
+          } else {
             $location.path('app/login');
           }
 
@@ -457,9 +460,11 @@ angular.module('starter.controllers', [])
 
   .controller('productCtrl', function ($scope, $location, MyServices, $stateParams, $rootScope) {
     $scope.$on('$ionicView.enter', function () {
-
+      getproducts();
     })
+
     var getproducts = function () {
+
       console.log($rootScope.showblockeddiv);
       $scope.products = {};
       $scope.products.quantity = 0;
@@ -478,9 +483,22 @@ angular.module('starter.controllers', [])
       });
 
     }
+    // Written by Farhan
+    // getproducts();
+
+    // End Farhan
+
+    // Written by Jyoti
+
     $scope.getStatus = function () {
+
+      console.log('in Enter');
       getproducts();
+      // $scope.showblockeddiv = true;
     }
+
+    // End Jyoti
+
     $scope.proToProDetail = function (id) {
       console.log('called');
       $location.path("app/product-detail/" + id);
@@ -535,6 +553,29 @@ angular.module('starter.controllers', [])
     }
     getOrders();
     $scope.cancelorder = function (index) {
+      $ionicPopup.show({
+        template: 'Are you sure want to cancel order ?',
+        title: 'Confirmation',
+        scope: $scope,
+        buttons: [{
+            text: 'No'
+          },
+          {
+            text: '<b>Yes</b>',
+            type: 'waves-effect waves-light btn red darken-1 ',
+            onTap: function (e) {
+              ordercancel(index);
+            }
+          }
+        ]
+      });
+
+
+
+
+      
+    }
+    var ordercancel=function(index){
       console.log(index);
       MyServices.cancelOrder($scope.orderhistory[index].id).then(function (params) {
         // getOrders();
@@ -557,8 +598,10 @@ angular.module('starter.controllers', [])
   })
 
   .controller('profileCtrl', function ($scope, $stateParams) {
+    $scope.$on('$ionicView.enter', function (e) {
+      $scope.retailersdata = retailersdata;
+    });
 
-    $scope.retailersdata = retailersdata;
 
 
   });

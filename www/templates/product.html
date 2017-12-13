@@ -6,10 +6,14 @@
     </div>
   </ion-header-bar>
   <ion-content>
+
+      <!-- <br><br><br><br> <h2>abc</h2> -->
+      
     <div class="pro-content row mb0" ng-if="!$root.showblockeddiv">
       <div class="c-col col s12">
         <div ng-repeat="product in products track by $index" ng-class-odd="'righttoleft'" ng-class-even="'lefttoright'">
           <div class="card horizontal">
+              
             <div class="card-image">
               <img ng-src="{{'http://192.168.0.112:8000/'+product.image.replace('public','thumb/storage')}}" class="img-responsive">
             </div>

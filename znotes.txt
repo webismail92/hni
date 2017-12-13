@@ -1,3 +1,5 @@
+//register page code start
+
 <ion-view class="body-img1" hide-nav-bar="true">
   <!-- <ion-header-bar>
     <h1 class="title">Register</h1>
@@ -8,26 +10,17 @@
   <ion-content>
     <div class="row">
       <form name="myform" class="col s12" ng-show="!$root.redirectedtofilladdress">
-        <div class="row mb0">
-          <div class="col s12">
-            <img src="img/logo.png" class="logor responsive-img" alt="">
-          </div>
-        </div>
-        <div class="row fontstyle">
-          <div class="input-field col s12 mt0 text-center">
-            <div  style="width: 100%;overflow:hidden;padding: 14px 0;"> <p class="fancy"><span>Registration Form</span></p> </div>
-          </div>
+        <div class="row pd35 fontstyle">
+          <div class=" col s12  text-center  ">Register yourself</div>
           <!-- <img src="img/logo.png" class="logo responsive-img body-img1" alt=""> -->
         </div>
         <div class="row">
-          <div class="input-field col s12">
+          <div class="input-field col s6">
             <input name="username" id="name" type="text" ng-model="retailer.name" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters">
             <label for="name" data-error="wrong" data-success="right" ng-class="{active:retailer.name}">Full Name</label>
             <span ng-bind="errors.name" class="errormessage"></span>
           </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
+          <div class="input-field col s6">
             <input id="email" name="emailaddress" ng-model="retailer.email" type="email" class="validate" required="">
             <label for="email" data-error="Invalid address" data-success="right" ng-class="{active:retailer.email}">Email</label>
             <span ng-bind="errors.email" class="errormessage"></span>
@@ -36,28 +29,48 @@
           </div>
         </div>
         <div class="row">
-          <div class="input-field col s12">
+          <div class="input-field col s6">
             <input id="password" ng-model="retailer.password" type="password" class="validate" required="">
             <label for="password" data-error="wrong" data-success="right" ng-class="{active:retailer.password}">Password</label>
             <span ng-bind="errors.password" class="errormessage"></span>
           </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
+          <div class="input-field col s6">
             <input id="c_password" type="password" ng-model="retailer.c_password" class="validate" required="">
             <label for="c_password" data-error="wrong" data-success="right" ng-class="{active:retailer.c_password}">Confirm Password</label>
             <span ng-bind="errors.c_password" class="errormessage"></span>
           </div>
         </div>
         <div class="row">
-          <div class="input-field col s12">
+          <div class="input-field col s6">
+            <input id="gstin" type="text" ng-model="retailer.gstin" class="validate" required="" pattern="[a-zA-Z0-9]{15}$">
+            <label for="gstin" data-error="wrong" data-success="right" ng-class="{active:retailer.gstin}">GSTIN No.</label>
+            <span ng-bind="errors.gstin" class="errormessage"></span>
+          </div>
+          <!-- <div class="input-field col s6">
+            <input id="pan" type="text" ng-model="retailer.pan" class="validate" required="" pattern="[a-zA-Z0-9]{10}$">
+            <label for="pan" data-error="wrong" data-success="right" ng-class="{active:retailer.pan}">PAN No.</label>
+            <span ng-bind="errors.pan" class="errormessage"></span>
+          </div> -->
+          <div class="input-field col s6">
+            <input id="pan" type="text" ng-model="retailer.pan" class="validate" required="" pattern="[a-zA-Z0-9]{10}$">
+            <label for="pan" data-error="wrong" data-success="right" ng-class="{active:retailer.pan}">PAN No.</label>
+            <span ng-bind="errors.pan" class="errormessage"></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s6">
+            <input id="shopname" type="text" ng-model="retailer.shopname" class="validate" required="">
+            <label for="shopname" data-error="wrong" data-success="right" ng-class="{active:retailer.shopname}">Shop Name</label>
+            <span ng-bind="errors.shopname" class="errormessage"></span>
+          </div>
+          <div class="input-field col s6">
             <input id="contact" type="text" ng-model="retailer.contact" class="validate" required="">
             <label for="contact" data-error="wrong" data-success="right" ng-class="{active:retailer.contact}">Contact No.</label>
             <span ng-bind="errors.contact" class="errormessage"></span>
           </div>
         </div>
         <div class="row">
-          <div class="input-field col s12 text-center">
+          <div class="input-field col s12 text-right">
             <!-- <button class="btn-large waves-effect waves-light red lighten-1" ng-click="register()">Finish
               <!-- <i class="material-icons right">send</i>
             </button> -->
@@ -67,45 +80,14 @@
             </button>
           </div>
         </div>
-        <hr>
-        <div class="row mb0">
-          <div class="col s6 text-left">
-            <p class="phbtn">Already registered?</p>
-          </div>
-          <div class="col s6 text-right">
-            <button class="waves-effect waves-light btn">
-              LOG IN
-            </button>
-          </div>
-        </div>
       </form>
     </div>
     <form ng-show="$root.redirectedtofilladdress">
       <div class="row">
-        <div class="input-field col s12">
-          <input id="shopname" type="text" ng-model="retailer.shopname" class="validate" required="">
-          <label for="shopname" data-error="wrong" data-success="right" ng-class="{active:retailer.shopname}">Shop Name</label>
-          <span ng-bind="errors.shopname" class="errormessage"></span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="gstin" type="text" ng-model="retailer.gstin" class="validate" required="" pattern="[a-zA-Z0-9]{15}$">
-          <label for="gstin" data-error="wrong" data-success="right" ng-class="{active:retailer.gstin}">GSTIN No.</label>
-          <span ng-bind="errors.gstin" class="errormessage"></span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="pan" type="text" ng-model="retailer.pan" class="validate" required="" pattern="[a-zA-Z0-9]{10}$">
-          <label for="pan" data-error="wrong" data-success="right" ng-class="{active:retailer.pan}">PAN No.</label>
-          <span ng-bind="errors.pan" class="errormessage"></span>
-        </div>
-      </div>
-      <div class="row">
         <div class="input-field col s6">
           <textarea name="username" id="name" ng-model="retailer.address" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters"></textarea>
           <label for="name" data-error="wrong" data-success="right">Address</label>
+
         </div>
       </div>
       <div class="row">
@@ -163,3 +145,69 @@
 
   </ion-content>
 </ion-view>
+
+
+//register page code end
+
+
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"]
+
+
+
+//profile page code start
+
+<div>
+      <div class="avtar text-center mrtp25">
+        <i class="material-icons usericon">account_circle</i>
+        <div>
+          <span class="heading1">{{retailersdata.name|initCap}}</span>
+        </div>
+      </div>
+      <div class="mrtp25 text-left">
+        <div class="heading2">Contact Info </div>
+        <div class=" mrtp10">
+          <span class="heading3">Email :</span>
+          <span class="heading3">{{retailersdata.email}}</span>
+        </div>
+        <div class=" mrtp5">
+          <span class="heading3">Contact :</span>
+          <span class="heading3">{{retailersdata.contact}}</span>
+        </div>
+      </div>
+      <div class="mrtp25 text-left">
+        <div class="heading2">Shop Info </div>
+        <div class=" mrtp10">
+          <span class="heading3">Shop name :</span>
+          <span class="heading3">{{retailersdata.shopname|initCap}}</span>
+        </div>
+        <div class=" mrtp5">
+          <span class="heading3">Address :</span>
+          <span class="heading3">{{retailersdata.address.address|initCap}}</span>
+        </div>
+        <div class=" mrtp5">
+          <span class="heading3">City :</span>
+          <span class="heading3">{{retailersdata.address.city|initCap}}</span>
+        </div>
+        <div class=" mrtp5">
+          <span class="heading3">Landmark :</span>
+          <span class="heading3">{{retailersdata.address.landmark|initCap}}</span>
+        </div>
+        <div class=" mrtp5">
+          <span class="heading3">pincode :</span>
+          <span class="heading3">{{retailersdata.address.pincode}}</span>
+        </div>
+      </div>
+      <div class="mrtp25 text-left">
+        <div class="heading2">Government proof</div>
+        <div class=" mrtp10">
+          <span class="heading3">Pan :</span>
+          <span class="heading3">{{retailersdata.pan}}</span>
+        </div>
+        <div class=" mrtp5">
+          <span class="heading3">GST :</span>
+          <span class="heading3">{{retailersdata.gstin?retailersdata.gstin:'NA'}}</span>
+        </div>
+      </div>
+    </div>
+
+//profile page code end

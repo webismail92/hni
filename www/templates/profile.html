@@ -1,61 +1,104 @@
 <ion-view class="body-img2" view-title="My Profile">
   <ion-content>
-    <!-- <div class="avtar"> 
-     <img src="img/bg2.jpg" height="200" width="200" class="circle ">
-    </div> -->
-    <div >
-    <div class="avtar text-center mrtp25">
-      <i class="material-icons usericon">account_circle</i>
-      <div>
-        <span class="heading1">{{retailersdata.name|initCap}}</span>
-      </div>
+
+    <div class="row">
+      <form name="myform" class="col s12" ng-show="!$root.redirectedtofilladdress">
+        <div class="card-panel blue lighten-2">
+          <div class="row mb0">
+            <div class="col s12 text-center">
+              <i class="material-icons usericon">account_circle</i>
+            </div>
+          </div>
+          <div class="row fontstyle">
+            <div class="input-field col s12 mt0 text-center">
+              <div style="width: 100%;overflow:hidden;padding: 14px 0;">
+                <p class="fancy">
+                  <span>My Account</span>
+                </p>
+              </div>
+            </div>
+            <!-- <img src="img/logo.png" class="logo responsive-img body-img1" alt=""> -->
+          </div>
+        </div>
+        <div class="row mb0">
+          <div class="col s12">
+            <h5 class="profileh5">Contact Info.</h5>
+          </div>
+        </div>
+        <div class="row mb0">
+          <div class="input-field col s12">
+            <input value="{{retailersdata.name|initCap}}" name="name" id="name" type="text" class="validate" disabled>
+            <label class="active" for="name">Full Name</label>
+          </div>
+        </div>
+        <div class="row mb0">
+          <div class="input-field col s12">
+            <input value="{{retailersdata.email}}" id="email" name="emailaddress" type="email" class="validate" disabled>
+            <label class="active" for="email">Email</label>
+          </div>
+        </div>
+        <div class="row mb0">
+          <div class="input-field col s12">
+            <input value="{{retailersdata.contact}}" id="contact" type="text" class="validate" disabled>
+            <label class="active" for="contact">Contact No.</label>
+          </div>
+        </div>
+        <div class="row mb0">
+          <div class="col s12">
+            <h5 class="profileh5">Shop Info.</h5>
+          </div>
+        </div>
+        <div class="row mb0">
+          <div class="input-field col s12">
+            <input value="{{retailersdata.shopname|initCap}}" id="shopname" name="shopname" type="text" class="validate" disabled>
+            <label class="active" for="shopname">Shop Name</label>
+          </div>
+        </div>
+        <div class="row mb0">
+          <div class="input-field col s12">
+            <input value="{{retailersdata.address.address|initCap}}" id="address" name="address" type="text" class="validate" disabled>
+            <label class="active" for="address">Address</label>
+          </div>
+        </div>
+        <div class="row mb0">
+          <div class="input-field col s12">
+            <input value="{{retailersdata.address.city|initCap}}" id="city" name="city" type="text" class="validate" disabled>
+            <label class="active" for="city">City</label>
+          </div>
+        </div>
+        <div class="row mb0">
+          <div class="input-field col s12">
+            <input value="{{retailersdata.address.landmark|initCap}}" id="landmark" name="landmark" type="text" class="validate" disabled>
+            <label class="active" for="landmark">Landmark</label>
+          </div>
+        </div>
+        <div class="row mb0">
+          <div class="input-field col s12">
+            <input value="{{retailersdata.address.pincode|initCap}}" id="pincode" name="pincode" type="text" class="validate" disabled>
+            <label class="active" for="pincode">Pincode</label>
+          </div>
+        </div>
+        <div class="row mb0">
+          <div class="col s12">
+            <h5 class="profileh5">Gov. Card Info.</h5>
+          </div>
+        </div>
+        <div class="row mb0">
+          <div class="input-field col s12">
+            <input value="{{retailersdata.pan|uppercase}}" id="pan" name="pan" type="text" class="validate" disabled>
+            <label class="active" for="pan">Pan</label>
+          </div>
+        </div>
+        <div class="row mb0">
+          <div class="input-field col s12">
+            <input value="{{(retailersdata.gstin?retailersdata.gstin:'NA')|uppercase}}" id="gstin" name="gstin" type="text" class="validate" disabled>
+            <label class="active" for="gstin">GST</label>
+          </div>
+        </div>
+      </form>
     </div>
-    <div class="mrtp25 text-left">
-      <div class="heading2">Contact Info </div>
-      <div class=" mrtp10">
-        <span class="heading3">Email :</span>
-        <span class="heading3">{{retailersdata.email}}</span>
-      </div>
-      <div class=" mrtp5">
-        <span class="heading3">Contact :</span>
-        <span class="heading3">{{retailersdata.contact}}</span>
-      </div>
-    </div>
-    <div class="mrtp25 text-left">
-      <div class="heading2">Shop Info </div>
-      <div class=" mrtp10">
-        <span class="heading3">Shop name :</span>
-        <span class="heading3">{{retailersdata.shopname|initCap}}</span>
-      </div>
-      <div class=" mrtp5">
-        <span class="heading3">Address :</span>
-        <span class="heading3">{{retailersdata.address.address|initCap}}</span>
-      </div>
-      <div class=" mrtp5">
-        <span class="heading3">City :</span>
-        <span class="heading3">{{retailersdata.address.city|initCap}}</span>
-      </div>
-      <div class=" mrtp5">
-        <span class="heading3">Landmark :</span>
-        <span class="heading3">{{retailersdata.address.landmark|initCap}}</span>
-      </div>
-      <div class=" mrtp5">
-        <span class="heading3">pincode :</span>
-        <span class="heading3">{{retailersdata.address.pincode}}</span>
-      </div>
-    </div>
-    <div class="mrtp25 text-left">
-      <div class="heading2">Government proof</div>
-      <div class=" mrtp10">
-        <span class="heading3">Pan :</span>
-        <span class="heading3">{{retailersdata.pan}}</span>
-      </div>
-      <div class=" mrtp5">
-        <span class="heading3">GST :</span>
-        <span class="heading3">{{retailersdata.gstin?retailersdata.gstin:'NA'}}</span>
-      </div>
-    </div>
-</div>
+
+
 
     <!-- <div ng-if="$root.showblockeddiv" class="mrtp40">
         <div class="col s12 m7">

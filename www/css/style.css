@@ -27,6 +27,10 @@
   width: 100%;
 }
 
+.body-bg1{
+  background: #d9fffc;
+}
+
 .body-img1 {
   background: url(../img/bg1.jpg);
   /* background-repeat: no-repeat; */
@@ -41,6 +45,10 @@
 
 
 /* ===========  Margin Top Bottom Start =============  */
+
+.mt0 {
+  margin-top: 0px !important;
+}
 
 .mt10 {
   margin-top: 10px !important;
@@ -472,7 +480,7 @@ textarea.materialize-textarea.invalid:focus,
 /*  */
 
 label {
-  font-size: .8rem;
+  font-size: 1.4rem !important;
   color: #000000 !important
 }
 
@@ -512,7 +520,7 @@ textarea.materialize-textarea {
   outline: none;
   height: 3rem;
   width: 100%;
-  font-size: 1rem;
+  font-size: 1.2em !important;
   margin: 0 0 20px 0;
   padding: 0;
   -webkit-box-shadow: none;
@@ -624,6 +632,13 @@ textarea.materialize-textarea:focus:not([readonly])+label {
 
 .logo {
   width: 100% !important;
+  padding: 0 65px;
+  z-index: 2;
+  position: relative;
+}
+
+.logor {
+  width: 100% !important;
   padding: 0 100px;
 }
 
@@ -688,13 +703,15 @@ textarea.materialize-textarea:focus:not([readonly])+label {
 }
 
 .myform {
-  margin: 4em auto;
+  margin: 0em auto;
   background: #fafafa;
   border: 1px solid #ebebeb;
+  position: relative;
+  z-index: 2;
 }
 
 .pd55 {
-  margin: 35% 12%;
+  padding: 15% 12%;
 }
 
 #fplnik {
@@ -706,11 +723,20 @@ textarea.materialize-textarea:focus:not([readonly])+label {
 }
 
 .bgdiv {
-  position: fixed;
-  width: 100%;
+  /* position: fixed; */
+  /* width: 100%; */
   /* background-color: #1e88e5; */
-  height: 50%;
+  /* height: 50%; */
   background:url(../img/bg1.jpg);
+
+
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 50%;
+  /* background-color: pink; */
+  z-index: 1;
 }
 
 .pd35 {
@@ -726,7 +752,7 @@ textarea.materialize-textarea:focus:not([readonly])+label {
 }
 
 div.scroll {
-  height: 100%;
+  /* height: 100%; */
 }
 
 .fontstyle {
@@ -833,4 +859,39 @@ color: #1e88e5;
 .text-justify
 {
   text-align: justify;
+}
+
+.phbtn{
+  line-height: 40px !important;
+}
+
+.fancy {
+  line-height: 0.3;
+  text-align: center;
+}
+.fancy span {
+  display: inline-block;
+  position: relative;  
+}
+.fancy span:before,
+.fancy span:after {
+  content: "";
+  position: absolute;
+  height: 5px;
+  border-bottom: 1px solid rgb(44, 44, 44);
+  border-top: 1px solid rgb(44, 44, 44);
+  top: 0;
+  width: 100%;
+}
+.fancy span:before {
+  right: 100%;
+  margin-right: 15px;
+}
+.fancy span:after {
+  left: 100%;
+  margin-left: 15px;
+}
+
+.profileh5{
+  font-weight: bolder;
 }
