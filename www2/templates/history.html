@@ -1,0 +1,209 @@
+<ion-view class="body-img2" view-title="My orders" hide-back-button="true">
+  <ion-header-bar>
+    <h1 class="title"></h1>
+    <div class="buttons">
+      <!-- <button class="button button-clear" ng-click="closeProduct()">Close</button> -->
+    </div>
+  </ion-header-bar>
+  <!--  -->
+  <ion-content delegate-handle="mainScroll">
+
+    <div on-swipe-down="onSwipeDown()">
+
+      <div class="history-box">
+        <ul class="tabs">
+          <li class="tab col s3">
+            <a class="active" href="#fo">Todays Order</a>
+          </li>
+          <li class="tab col s3">
+            <a href="#oo">Old Order</a>
+          </li>
+        </ul>
+        <div class="col s12 text-center">
+          <ion-spinner icon="android" ng-if="showspinner"></ion-spinner>
+        </div>
+        <div id="fo" class="col s12 history-tab">
+          <div class="pro-content row mb0" ng-repeat="history in todayorders">
+            <div class="c-col col s12">
+              <div class="card horizontal c-mb0">
+                <div class="card-stacked border-left">
+                  <div class="card-content">
+                    <div class="row pb0">
+                      <div class="col s6">
+                        <p>{{history.name}}</p>
+                      </div>
+                      <div class="col s6">
+                        <span class="badge badge-cus red ">{{history.status}}</span>
+                      </div>
+                    </div>
+                    <div class="row pb0">
+                      <div class="col s6">
+                        <p>Volume : {{history.volume}} ML </p>
+                      </div>
+                      <div class="col s6">
+                        <p>Qty : {{history.quantity}} piece</p>
+                      </div>
+                    </div>
+                    <div class="row pb0">
+                      <div class="col s6">
+                        <p>Total : &#8377; {{history.price*history.quantity}}</p>
+                      </div>
+                      <div class="col s6">
+                        <p>Date : {{callfunction(history.created_at)}}</p>
+                      </div>
+                    </div>
+                    <div class="row pb0">
+                      <div class="col s6">
+                        <p>Order Id : {{history.id}}</p>
+                      </div>
+                      <!-- <div class="col s6">
+                        <button ng-click="cancelorder($index,true)" class="btn btn-success float-right cbtn" ng-if="history.status!='cancelled' && history.status!='delivered'">cancel</button>
+                      </div> -->
+
+                      <!--  -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div ng-if="todayorders.length==0">
+            <div class="oops-outer">
+              <div class="oops">
+                <!-- <i class="material-icons font36">cloud_off</i> -->
+                <h5>You have not placed any order yet !</h5>
+              </div>
+            </div>
+          </div>
+          <div class="pro-content row mb0">
+            <div class="c-col col s12">
+              <div class="card horizontal c-mb0">
+                <div class="card-stacked border-left">
+                  <div class="card-content">
+                    <div class="row pb0">
+                      <div class="col s12">
+                        <h5 class="text-center">Product Total</h5>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row pb0">
+                      <div class="col s6">
+                        <p>Net Qty : {{totalquantityoftodayorders}}</p>
+                      </div>
+                      <div class="col s6">
+                        <p class="float-right">Net Total : &#8377; {{totaloftodayorders|roundoff:2}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="oo" class="col s12">
+          <div class="pro-content row mb0 history-filter">
+            <div class="c-col col s12">
+              <div class="card horizontal c-mb0">
+                <div class="card-stacked border-left">
+                  <div class="card-content">
+                    <div class="row pb0">
+                      <div class="col s12">
+                        <h5>Filter</h5>
+                      </div>
+                    </div>
+                    <div class="row pb0">
+                      <div class="col s6">
+                        <select class="form-control" id=ddl1 ng-model="filter.month">
+                          <option value="">--Select Month--</option>
+                          <option value="{{month}}" ng-repeat="month in months">{{month}}</option>
+                        </select>
+                      </div>
+                      <div class="col s6">
+                        <select class="form-control" id=ddl1 ng-model="filter.year">
+                          <option value="">--Select Year--</option>
+                          <option value="{{year}}" ng-repeat="year in years">{{year}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="history-tab">
+            <div class="pro-content row mb0" ng-repeat="history in orderhistory">
+              <div class="c-col col s12" ng-if="filterorders(history.created_at)">
+                <div class="card horizontal c-mb0">
+                  <div class="card-stacked border-left">
+                    <div class="card-content">
+                      <div class="row pb0">
+                        <div class="col s6">
+                          <p>{{history.name}}</p>
+                        </div>
+                        <div class="col s6">
+                          <span class="badge badge-cus red ">{{history.status}}</span>
+                        </div>
+                      </div>
+                      <div class="row pb0">
+                        <div class="col s6">
+                          <p>Volume : {{history.volume}} ML </p>
+                        </div>
+                        <div class="col s6">
+                          <p>Qty : {{history.quantity}} piece</p>
+                        </div>
+                      </div>
+                      <div class="row pb0">
+                        <div class="col s6">
+                          <p>Total : &#8377; {{history.price*history.quantity}}</p>
+                        </div>
+                        <div class="col s6">
+                          <p>Date : {{callfunction(history.created_at)}}</p>
+                        </div>
+                      </div>
+                      <div class="row pb0">
+                        <div class="col s6">
+                          <p>Order Id : {{history.id}}</p>
+                        </div>
+                        <!-- <div class="col s6">
+                        <button ng-click="cancelorder($index,false)" class="btn btn-success float-right cbtn" ng-if="history.status!='cancelled' && history.status!='delivered'">cancel</button>
+                      </div> -->
+
+                        <!--  -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div ng-if="orderhistory.length==0">
+            <div class="oops-outer">
+              <div class="oops">
+                <!-- <i class="material-icons font36">cloud_off</i> -->
+                <h5>You have not placed any order yet !</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </ion-content>
+  <ion-footer-bar>
+    <div class="footer-copyright bar bar-footer bar-balanced">
+      <div class="container">
+        <marquee>
+          <ul id="luckyDrawList">
+            <li class="fixed-footer" ng-repeat="contest in $root.contestsdata">
+              <span ng-if="contest.contest">{{contest.contest}}</span>
+              <span ng-if="contest.created_at">&raquo;{{contest.created_at}}</span>
+              <span ng-if="contest.winner">&raquo; {{contest.winner|initCap}}</span>
+              </span>
+            </li>
+          </ul>
+        </marquee>
+      </div>
+    </div>
+  </ion-footer-bar>
+</ion-view>

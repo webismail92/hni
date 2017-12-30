@@ -1,0 +1,181 @@
+<!-- <ion-nav-bar class="bar-stable barstyle z-depth-1" ng-show="showheader">
+    <ion-nav-buttons side="left" >
+      <button  ng-click="$root.logoutconfirmation()">
+    <i class="material-icons left menubtn" >exit_to_app</i><span class="menubtn">Logout</span>
+  </button>
+    </ion-nav-buttons>
+</ion-nav-bar> -->
+<ion-view class="body-img1" view-title="Registration" hide-back-button="true"  hide-nav-bar="{{!$root.showheader}}">
+  
+  <ion-content>
+    <div class="row">
+      <form name="myform" class="col s12" ng-if="!$root.redirectedtofilladdress">
+        <div class="row mb0">
+          <div class="col s12">
+            <img src="img/logo.png" class="logor responsive-img" alt="">
+          </div>
+        </div>
+        <div class="row fontstyle">
+          <div class="input-field col s12 mt0 text-center">
+            <div style="width: 100%;overflow:hidden;padding: 14px 0;">
+              <p class="fancy">
+                <span>Registration Form</span>
+              </p>
+            </div>
+          </div>
+          <!-- <img src="img/logo.png" class="logo responsive-img body-img1" alt=""> -->
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input name="username" id="username" type="text" ng-focus="errors.name=''"  ng-model="retailer.name" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters">
+            <label for="name" data-error="Only text is allowed !" data-success="" ng-class="{active:retailer.name}">Full Name <span class="errormessage">*</span></label>
+            <span ng-bind="errors.name" class="errormessage"></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="email" name="emailaddress" ng-focus="errors.email=''" ng-model="retailer.email" type="email" class="validate" required="">
+            <label for="email" data-error="Invalid email !" data-success="" ng-class="{active:retailer.email}">Email <span class="errormessage">*</span></label>
+            <span ng-bind="errors.email" class="errormessage"></span>
+            <!-- <span ng-if=myform.emailaddress.$error.email >Invalid Email address</span> -->
+            <!-- <span ng-if=myform.emailaddress.$error.required >Email is required</span> -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="password" ng-model="retailer.password" ng-focus="errors.password=''" type="password" class="validate" required="">
+            <label for="password" data-error="Required !" data-success="" ng-class="{active:retailer.password}">Password <span class="errormessage">*</span></label>
+            <span ng-bind="errors.password" class="errormessage"></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="c_password" type="password" ng-model="retailer.c_password" ng-focus="errors.c_password=''"  class="validate" required="" data-match="retailer.password">
+            <label for="c_password" data-error="Required or password didn't match !" data-success="" ng-class="{active:retailer.c_password}">Confirm Password <span class="errormessage">*</span></label>
+            <span ng-bind="errors.c_password" class="errormessage"></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="contact" type="text" ng-model="retailer.contact" ng-focus="errors.contact='' "   class="validate" required="">
+            <label for="contact" data-error="Requird !" data-success="" ng-class="{active:retailer.contact}">Contact No. <span class="errormessage">*</span></label>
+            <span ng-bind="errors.contact" class="errormessage"></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="shopname" type="text" ng-model="retailer.shopname" ng-focus="errors.shopname=''"  class="validate" required="">
+            <label for="shopname" data-error="Required !" data-success="" ng-class="{active:retailer.shopname}">Shop Name <span class="errormessage">*</span></label>
+            <span ng-bind="errors.shopname" class="errormessage"></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="gstin" type="text" ng-model="retailer.gstin" class="validate" ng-focus="errors.gstin=''"   pattern="[a-zA-Z0-9]{15}$">
+            <label for="gstin" data-error="Invalid GSTIN " data-success="" ng-class="{active:retailer.gstin}">GSTIN No.</label>
+            <span ng-bind="errors.gstin" class="errormessage"></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="pan" type="text" ng-model="retailer.pan" class="validate" ng-focus="errors.pan=''"  required="" pattern="[a-zA-Z0-9]{10}$">
+            <label for="pan" data-error="Invalid !" data-success=""  ng-class="{active:retailer.pan}">PAN No. <span class="errormessage">*</span></label>
+            <span ng-bind="errors.pan" class="errormessage"></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12 text-center">
+            <!-- <button class="btn-large waves-effect waves-light red lighten-1" ng-click="register()">Finish
+              <!-- <i class="material-icons right">send</i>
+            </button> -->
+            <button class="btn waves-effect waves-light  red darken-3 z-depth-4" ng-click="getmapready()">
+              Next Step
+              <i class="material-icons right">navigate_next</i>
+            </button>
+          </div>
+        </div>
+        <hr>
+        <div class="row mb0">
+          <div class="col s6 text-left">
+            <p class="phbtn">Already registered?</p>
+          </div>
+          <div class="col s6 text-right">
+            <a href="#/app/login" class="btn waves-effect waves-light  red darken-3 z-depth-4">
+              LOG IN
+            </a>
+          </div>
+        </div>
+      </form>
+    </div>
+    <form ng-show="$root.redirectedtofilladdress">
+
+      <div class="row">
+        <div class="input-field col s6">
+          <textarea name="address" class="materialize-textarea pb0" ng-focus="errorsforaddress.address[0]=''" id="name" ng-model="retailer.address" class="validate" required=""  title="please enter letters"></textarea>
+          <label for="name" data-error="Invalid address" data-success="">Address <span class="errormessage">*</span></label>
+          <span ng-bind="errorsforaddress.address[0]" class="errormessage"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input type="text" ng-model="retailer.city" ng-focus="errorsforaddress.city[0]=''" class="validate" required="" pattern="[a-zA-Z]+" title="please enter letters">
+          <label for="name" data-error="Invalid city" data-success="">City <span class="errormessage">*</span></label>
+          <span ng-bind="errorsforaddress.city[0]" class="errormessage"></span>
+
+        </div>
+        <div class="input-field col s6">
+          <input ng-model="retailer.pincode" type="text" ng-focus="errorsforaddress.pincode[0]" class="validate" required="">
+          <label for="email" data-error="Invalid Pincode !" data-success="">Pincode <span class="errormessage">*</span></label>
+          <span ng-bind="errorsforaddress.pincode[0]" class="errormessage"></span>
+          <!-- <span ng-if=myform.emailaddress.$error.email >Invalid Email address</span> -->
+          <!-- <span ng-if=myform.emailaddress.$error.required >Email is required</span> -->
+        </div>
+      </div>
+      <div class="row">
+
+        <div class=" col s6">
+
+          <select class="form-control" id=ddl1 ng-model="ret.zone">
+            <option value="">--Select Zone--</option>
+            <option value="harbour">Harbour</option>
+            <option value="western">Western</option>
+            <option value="central">Central</option>
+            <option value="transharbour">Transharbour</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class=" col s6">
+          <select class="form-control" id=ddl2 ng-model="retailer.neareststn">
+            <option value="">--Select nearest station--</option>
+            <option ng-repeat="area in areas track by $index" ng-if="ret.zone==area.zone" value="{{area.id}}">{{area.station}}</option>
+          </select>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="input-field col s12 text-center map-container">
+          <input id="pac-input" class="controls" type="text" placeholder="Search Box" ng-model="location.input">
+
+          <div id="map"></div>
+        </div>
+      </div>
+      <div class="row">
+          <div class="input-field col s6 text-center">
+          <button class="btn waves-effect waves-light red lighten-1" ng-if="!$root.showheader" ng-click="$root.redirectedtofilladdress=false">
+             Back
+            </button>
+            </div>
+        <div class="input-field col s6 text-center">
+
+          <button class="btn waves-effect waves-light red lighten-1" ng-click="register()">Finish
+            <i class="material-icons right"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+
+  </ion-content>
+</ion-view>

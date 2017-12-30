@@ -17,25 +17,25 @@
         </div>
 
 
-        <div class="row">
+        <div class="row mb5">
           <div class="input-field col s6 text-center">
 
-            <input id="email" type="text" class="validate" required="" ng-model="retailer.email">
-            <label for="email" data-error="wrong" data-success="right" ng-class="{active:retailer.email}">Email</label>
+            <input type="email" class="validate" required="" ng-model="retailer.email">
+            <label class="active" for="email" data-error="invalid email" data-success="">Email</label>
           </div>
         </div>
-        <div class="row">
+        <div class="row mb5">
           <div class="input-field col s6 text-center">
-            <input id="password" type="password" class="validate" required="" ng-model="retailer.password">
-            <label for="password" data-error="wrong" data-success="right" ng-class="{active:retailer.password}">Password</label>
+            <input  type="password" class="validate" required="" ng-model="retailer.password">
+            <label class="active" for="password" data-error="" data-success="">Password</label>
           </div>
         </div>
 
         <a href="#/app/forgotpassword" class="bluetext" id="fplnik">forgot your password ?</a>
 
-        <div class="row">
+        <div class="row mb5">
           <div class="input-field col s12 text-center">
-            <button class="btn waves-effect waves-light  red darken-3 z-depth-4" type="submit" name="action">Login
+            <button class="btn waves-effect waves-light  red darken-3 z-depth-4" type="submit">Login
 
             </button>
           </div>
