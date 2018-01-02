@@ -382,6 +382,10 @@
 
 /* column */
 
+.c-col:first-child {
+  padding: 0rem 0px 0.5rem !important;
+}
+
 .c-col {
   padding: 0.5rem 0px !important;
 }
@@ -675,6 +679,10 @@ textarea.materialize-textarea.validate+label {
 
 .pro-content {
   padding: 0 5px !important;
+}
+
+.pro-content:last-child {
+  padding: 0 5px 46px !important;
 }
 
 .card {
@@ -1138,3 +1146,18 @@ marquee {
 .register label{
   font-size: 1.4em !important
 }
+
+.ccol{
+  padding: 0 5px !important;
+}
+
+.cion-content{
+  /* margin-bottom: 46px; */
+}
+
+.footer-copyright{
+  /* position: fixed; */
+  
+  /* margin-top: 600px !important */
+}
+

@@ -25,6 +25,7 @@
           </div>
           <!-- <img src="img/logo.png" class="logo responsive-img body-img1" alt=""> -->
         </div>
+        <div ng-if="!$root.redirectedtofilladdress">
         <div class="row mb5">
           <div class="input-field col s12">
             <input placeholder="" name="username" id="username" type="text" ng-focus="errors.name=''" ng-model="retailer.name" class="validate"
@@ -98,8 +99,8 @@
             </label>
           </div>
         </div>
-
-
+      </div>
+<div>
         <div class="row mb5">
           <div class="input-field col s6">
             <textarea name="address" id="name" ng-focus="errorsforaddress.address[0]=''" ng-model="retailer.address" class="materialize-textarea pb0 validate"
@@ -142,7 +143,7 @@
 
           <div class=" col s12">
 
-            <select class="form-control" id=ddl1 ng-model="ret.zone" ng-if="retailer.state=='maharashtra'" required="">
+            <select class="form-control" id=ddl1 ng-model="retailer.zone" ng-if="retailer.state=='maharashtra'" required="">
               <option value="">--Select Zone--</option>
               <option value="harbour">Harbour</option>
               <option value="western">Western</option>
@@ -156,10 +157,10 @@
 
         <div class="row  mb5">
           <div class=" col s12">
-            <select class="form-control" id=ddl2 ng-change="errorsforaddress.area[0]=''" ng-model="retailer.neareststn" ng-if="retailer.state=='maharashtra' && ret.zone"
+            <select class="form-control" id=ddl2 ng-change="errorsforaddress.area[0]=''" ng-model="retailer.neareststn" ng-if="retailer.state=='maharashtra' && retailer.zone"
               required="">
               <option value="">--Select nearest station--</option>
-              <option ng-repeat="area in areas track by $index" ng-if="ret.zone==area.zone" value="{{area.id}}">{{area.station}}</option>
+              <option ng-repeat="area in areas track by $index" ng-if="retailer.zone==area.zone" value="{{area.id}}">{{area.station}}</option>
             </select>
 
           </div>
@@ -174,7 +175,7 @@
             <div id="map"></div>
           </div>
         </div> -->
-
+      </div>
         <div class="row">
           <div class="input-field col s12 text-center">
             <!-- <button class="btn-large waves-effect waves-light red lighten-1" ng-click="register()">Finish
