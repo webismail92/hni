@@ -1,5 +1,5 @@
-var baseUrl="http://192.168.0.106:8000/api/";
-// var baseUrl="http://hniperfumes.in/api/";
+// var baseUrl="http://192.168.0.106:8000/api/";
+var baseUrl="http://hniperfumes.in/api/";
 var myservices = angular.module('myservices', [])
 
 

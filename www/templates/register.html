@@ -142,7 +142,7 @@
 
           <div class=" col s12">
 
-            <select class="form-control" id=ddl1 ng-model="ret.zone" ng-if="retailer.state=='maharashtra'" required="">
+            <select class="form-control" id=ddl1 ng-model="retailer.zone" ng-if="retailer.state=='maharashtra'" required="">
               <option value="">--Select Zone--</option>
               <option value="harbour">Harbour</option>
               <option value="western">Western</option>
@@ -156,10 +156,10 @@
 
         <div class="row  mb5">
           <div class=" col s12">
-            <select class="form-control" id=ddl2 ng-change="errorsforaddress.area[0]=''" ng-model="retailer.neareststn" ng-if="retailer.state=='maharashtra' && ret.zone"
+            <select class="form-control" id=ddl2 ng-change="errorsforaddress.area[0]=''" ng-model="retailer.neareststn" ng-if="retailer.state=='maharashtra' && retailer.zone"
               required="">
               <option value="">--Select nearest station--</option>
-              <option ng-repeat="area in areas track by $index" ng-if="ret.zone==area.zone" value="{{area.id}}">{{area.station}}</option>
+              <option ng-repeat="area in areas track by $index" ng-if="retailer.zone==area.zone" value="{{area.id}}">{{area.station}}</option>
             </select>
 
           </div>

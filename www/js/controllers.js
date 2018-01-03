@@ -2,15 +2,16 @@ var product = [];
 var retailersdata = {};
 angular.module('starter.controllers', [])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, MyServices, $location, $rootScope, $cordovaNetwork, $ionicPopup, $ionicSideMenuDelegate, $ionicHistory,$ionicPlatform) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, MyServices, $location, $rootScope, $cordovaNetwork, $ionicPopup, $ionicSideMenuDelegate, $ionicHistory, $ionicPlatform) {
 
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
     // listen for the $ionicView.enter event:
     $scope.$on('$ionicView.enter', function (e) {
+      
       if ($.jStorage.get('token')) {
-        MyServices.getDetails().then(function (params) {}).catch(function (fallback) {
+        MyServices.getDetails().then(function (params) { }).catch(function (fallback) {
           if (fallback.data)
             if (fallback.data.error == "Unauthenticated.") {
               $.jStorage.flush();
@@ -26,7 +27,7 @@ angular.module('starter.controllers', [])
           console.log(fallback);
         });
       }
-    
+
 
     });
 
@@ -109,15 +110,15 @@ angular.module('starter.controllers', [])
         title: 'Confirmation',
         scope: $scope,
         buttons: [{
-            text: 'Cancel'
-          },
-          {
-            text: '<b>Yes</b>',
-            type: 'waves-effect waves-light btn red darken-1 ',
-            onTap: function (e) {
-              logout();
-            }
+          text: 'Cancel'
+        },
+        {
+          text: '<b>Yes</b>',
+          type: 'waves-effect waves-light btn red darken-1 ',
+          onTap: function (e) {
+            logout();
           }
+        }
         ]
       });
     }
@@ -141,10 +142,12 @@ angular.module('starter.controllers', [])
   .controller('registerCtrl', function ($scope, $http, MyServices, $location, $cordovaGeolocation, $rootScope, $timeout, $interval, $ionicLoading, $ionicSideMenuDelegate) {
 
     $scope.$on('$ionicView.enter', function (e) {
+      console.log("In registerCtrl");
+      getMap();
       $ionicSideMenuDelegate.canDragContent(false);
       $('#address').trigger('autoresize');
       var infowindow;
-      $scope.ret = {};
+      // $scope.ret = {};
       $scope.retailer = {};
       $scope.retailer.name = "";
       $scope.retailer.email = "";
@@ -160,7 +163,7 @@ angular.module('starter.controllers', [])
       $scope.retailer.lat = 0;
       $scope.retailer.lng = 0;
       $scope.retailer.landmark = "";
-      $scope.ret.zone = "";
+      $scope.retailer.zone = "";
       $scope.retailer.neareststn = "";
       $scope.location = {};
       $scope.location.input = "";
@@ -227,56 +230,57 @@ angular.module('starter.controllers', [])
 
       $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
 
-        var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        // var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         $scope.retailer.lat = position.coords.latitude,
-          $scope.retailer.lng = position.coords.longitude;
-        var mapOptions = {
-          center: latLng,
-          zoom: 15,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
+        $scope.retailer.lng = position.coords.longitude;
+        // var mapOptions = {
+        //   center: latLng,
+        //   zoom: 15,
+        //   mapTypeId: google.maps.MapTypeId.ROADMAP
+        // };
         var pyrmont = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-        $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-        google.maps.event.addListener($scope.map, 'click', function (event) {
-          console.log(event);
-          $scope.retailer.lat = event.latLng.lat();
-          $scope.retailer.lng = event.latLng.lng();
-          getPlace(event.placeId);
-          console.log(event.placeId);
-          createMarker(event.latLng);
+        // $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-        });
-        var input = document.getElementById('pac-input');
-        var searchBox = new google.maps.places.SearchBox(input);
+        // google.maps.event.addListener($scope.map, 'click', function (event) {
+        //   console.log(event);
+        //   $scope.retailer.lat = event.latLng.lat();
+        //   $scope.retailer.lng = event.latLng.lng();
+        //   getPlace(event.placeId);
+        //   console.log(event.placeId);
+        //   createMarker(event.latLng);
 
-        searchBox.addListener('places_changed', function () {
-          var places = searchBox.getPlaces();
-          console.log('place is changed');
+        // });
+        // var input = document.getElementById('pac-input');
+        // var searchBox = new google.maps.places.SearchBox(input);
 
-          $scope.retailer.lat = places[0].geometry.location.lat();
-          $scope.retailer.lng = places[0].geometry.location.lng();
+        // searchBox.addListener('places_changed', function () {
+        //   var places = searchBox.getPlaces();
+        //   console.log('place is changed');
 
-          $scope.retailer.landmark = places[0].name;
-          console.log($scope.retailer.landmark);
-          latLng = new google.maps.LatLng(places[0].geometry.location.lat(), places[0].geometry.location.lng());
-          mapOptions = {
-            center: latLng,
-            zoom: 15,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
-          //$scope.map.animateCamera();
-          console.log($scope.map);
-          $scope.map.setOptions(mapOptions);
+          // $scope.retailer.lat = places[0].geometry.location.lat();
+          // $scope.retailer.lng = places[0].geometry.location.lng();
 
-          createMarker(places[0].geometry.location);
-          console.log(places[0].geometry.location.lat() + " " + places[0].geometry.location.lng());
-          if (places.length == 0) {
-            return;
-          }
-        });
+          // $scope.retailer.landmark = places[0].name;
+          // console.log($scope.retailer.landmark);
+          // latLng = new google.maps.LatLng(places[0].geometry.location.lat(), places[0].geometry.location.lng());
+          // mapOptions = {
+          //   center: latLng,
+          //   zoom: 15,
+          //   mapTypeId: google.maps.MapTypeId.ROADMAP
+          // };
+          // //$scope.map.animateCamera();
+          // console.log($scope.map);
+          // $scope.map.setOptions(mapOptions);
+
+        //   createMarker(places[0].geometry.location);
+        //   console.log(places[0].geometry.location.lat() + " " + places[0].geometry.location.lng());
+        //   if (places.length == 0) {
+        //     return;
+        //   }
+        // });
         // $scope.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
         // var service = new google.maps.places.PlacesService($scope.map);
@@ -319,7 +323,7 @@ angular.module('starter.controllers', [])
     console.log('test' + $rootScope.redirectedtofilladdress);
 
     $scope.callfunction = function () {
-
+      console.log("in call function ");
       $ionicLoading.show({
         template: 'Processing....',
         duration: 500
@@ -333,7 +337,7 @@ angular.module('starter.controllers', [])
           console.log(param);
           $rootScope.redirectedtofilladdress = true;
           insertaddress();
-          // $location.path('app/product');
+          
         }).catch(function (fallback) {
           $scope.errors = fallback.data.error;
           $rootScope.redirectedtofilladdress = false;
@@ -344,13 +348,14 @@ angular.module('starter.controllers', [])
 
     }
     var insertaddress = function () {
-      console.log($scope.retailer);
+      console.log("in insertAddress Function.", $scope.retailer);
       MyServices.insertAddress($scope.retailer).then(function (param) {
+        
         $.jStorage.set('state', param.data.address.state);
         $rootScope.redirectedtofilladdress = false;
         $rootScope.showheader = false;
         $location.path('app/product');
-        console.log(param);
+        console.log(param, "Successfully Data Submitted");
       }).catch(function (fallback) {
         $scope.errorsforaddress = fallback.data;
 
@@ -420,9 +425,9 @@ angular.module('starter.controllers', [])
         $ionicLoading.hide();
 
       }).catch(function (fallback) {
-        if(fallback.data)
-        if(fallback.data.error)
-        $scope.errors = fallback.data.error;
+        if (fallback.data)
+          if (fallback.data.error)
+            $scope.errors = fallback.data.error;
         console.log($scope.errors);
         Materialize.toast($scope.errors, 2000);
         $ionicLoading.hide();
@@ -671,26 +676,26 @@ angular.module('starter.controllers', [])
         title: 'Confirmation',
         scope: $scope,
         buttons: [{
-            text: 'No'
-          },
-          {
-            text: '<b>Yes</b>',
-            type: 'waves-effect waves-light btn red darken-1 ',
-            onTap: function (e) {
-              console.log($scope.products.quantity);
-              MyServices.orderProducts(product[id].id, $scope.products).then(function (param) {
-                console.log(param);
-                $location.path('app/product');
-              }).catch(function (fallback) {
-                if (fallback.data.error == "Unauthenticated.") {
-                  Materialize.toast('Your token has been expired! Login again.', 3000);
-                  $location.path('app/login');
-                }
-                $scope.error = fallback.data;
-                console.log(fallback);
-              });
-            }
+          text: 'No'
+        },
+        {
+          text: '<b>Yes</b>',
+          type: 'waves-effect waves-light btn red darken-1 ',
+          onTap: function (e) {
+            console.log($scope.products.quantity);
+            MyServices.orderProducts(product[id].id, $scope.products).then(function (param) {
+              console.log(param);
+              $location.path('app/product');
+            }).catch(function (fallback) {
+              if (fallback.data.error == "Unauthenticated.") {
+                Materialize.toast('Your token has been expired! Login again.', 3000);
+                $location.path('app/login');
+              }
+              $scope.error = fallback.data;
+              console.log(fallback);
+            });
           }
+        }
         ]
       });
 
@@ -717,20 +722,20 @@ angular.module('starter.controllers', [])
     $scope.filter.month = $scope.months[new Date().getMonth()];
     $scope.filter.year = (new Date().getFullYear()).toString();
 
-   
+
     var todaysdate = new Date().toLocaleDateString();
     console.log('history ctrl');
-   $scope.diffDays =  function (d1) {
-   
-      d1=new Date(d1);
-      var d2=new Date();
+    $scope.diffDays = function (d1) {
+
+      d1 = new Date(d1);
+      var d2 = new Date();
       var t2 = d2.getTime();
       var t1 = d1.getTime();
-     var difference= 25-(parseInt((t2 - t1) / (24 * 3600 * 1000)));
-     console.log(difference);
-     return difference<0?0:difference; 
-    
-  }
+      var difference = 25 - (parseInt((t2 - t1) / (24 * 3600 * 1000)));
+      console.log(difference);
+      return difference < 0 ? 0 : difference;
+
+    }
     var getOrders = function () {
       $scope.orderhistory = [];
       $scope.todayorders = [];
@@ -741,21 +746,21 @@ angular.module('starter.controllers', [])
       $scope.totalquantityofdueorders = 0;
       MyServices.getOrderHistory().then(function (param) {
         $scope.todayorders = param.data.orders;
-       // $scope.orderhistory = param.data.invoice;
+        // $scope.orderhistory = param.data.invoice;
         for (index in param.data.orders) {
           $scope.totaloftodayorders += parseFloat(param.data.orders[index].price * param.data.orders[index].quantity);
           $scope.totalquantityoftodayorders += parseInt(param.data.orders[index].quantity);
         }
 
         for (index in param.data.invoice) {
-          param.data.invoice[index].products=JSON.parse( param.data.invoice[index].products);
-          if(param.data.invoice[index].paid==0)
+          param.data.invoice[index].products = JSON.parse(param.data.invoice[index].products);
+          if (param.data.invoice[index].paid == 0)
             $scope.dueorders.push(param.data.invoice[index]);
-            else if(param.data.invoice[index].status=='delivered' && param.data.invoice[index].paid==1)
+          else if (param.data.invoice[index].status == 'delivered' && param.data.invoice[index].paid == 1)
             $scope.orderhistory.push(param.data.invoice[index]);
-        //    $scope.dueorders[index].products = JSON.parse($scope.dueorders[index].products);
-            // console.log($scope.diffDays("12/20/2017"));
-          
+          //    $scope.dueorders[index].products = JSON.parse($scope.dueorders[index].products);
+          // console.log($scope.diffDays("12/20/2017"));
+
         }
         /* for (index in param.data.orders) {
           if (param.data.orders[index].status == 'pending' || param.data.orders[index].status == 'dispatched') {
@@ -794,15 +799,15 @@ angular.module('starter.controllers', [])
         title: 'Confirmation',
         scope: $scope,
         buttons: [{
-            text: 'No'
-          },
-          {
-            text: '<b>Yes</b>',
-            type: 'waves-effect waves-light btn red darken-1 ',
-            onTap: function (e) {
-              ordercancel(index, today);
-            }
+          text: 'No'
+        },
+        {
+          text: '<b>Yes</b>',
+          type: 'waves-effect waves-light btn red darken-1 ',
+          onTap: function (e) {
+            ordercancel(index, today);
           }
+        }
         ]
       });
 

@@ -28,7 +28,6 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-geolocation": {},
       "cordova-plugin-network-information": {}
-      
     },
     "platforms": [
       "android"
