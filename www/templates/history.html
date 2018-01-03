@@ -1,15 +1,12 @@
 <ion-view class="body-img2" view-title="My orders" hide-back-button="true">
-  <ion-header-bar>
+  <!-- <ion-header-bar>
     <h1 class="title"></h1>
     <div class="buttons">
-      <!-- <button class="button button-clear" ng-click="closeProduct()">Close</button> -->
+      <button class="button button-clear" ng-click="closeProduct()">Close</button>
     </div>
-  </ion-header-bar>
-  <!--  -->
+  </ion-header-bar> -->
   <ion-content delegate-handle="mainScroll">
-
     <div on-swipe-down="onSwipeDown()">
-
       <div class="history-box">
         <ul class="tabs">
           <li class="tab col s3">
@@ -25,7 +22,7 @@
         <div class="col s12 text-center">
           <ion-spinner icon="android" ng-if="showspinner"></ion-spinner>
         </div>
-        <div id="fo" class="col s12 history-tab">
+        <div id="fo" class="col s12 history-tab ccol">
           <div class="pro-content row mb0" ng-repeat="history in todayorders">
             <div class="c-col col s12">
               <div class="card horizontal c-mb0">
@@ -33,7 +30,9 @@
                   <div class="card-content">
                     <div class="row pb0">
                       <div class="col s12">
-                        <p><strong> {{history.name}} </strong></p>
+                        <p>
+                          <strong> {{history.name}} </strong>
+                        </p>
                       </div>
                     </div>
                     <div class="row pb0">
@@ -100,8 +99,8 @@
             </div>
           </div>
         </div>
-        <div id="oo" class="col s12">
-          <div class="pro-content row mb0 history-filter">
+        <div id="oo" class="col s12 ccol">
+          <div class="pro-content row mb0">
             <div class="c-col col s12">
               <div class="card horizontal c-mb0">
                 <div class="card-stacked border-left">
@@ -199,7 +198,7 @@
             </div>
           </div>
         </div>
-        <div id="do" class="col s12 history-tab">
+        <div id="do" class="col s12 history-tab ccol">
           <div class="pro-content row mb0" ng-repeat="history in dueorders">
             <div class="c-col col s12">
               <div class="card horizontal c-mb0">
@@ -227,7 +226,7 @@
                         <p>Payment status : {{history.paid==0?'Unpaid':'Paid'}}</p>
                       </div>
                       <div class="col s6">
-                       
+
                       </div>
                     </div>
                     <div class="row pb0">

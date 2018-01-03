@@ -335,7 +335,7 @@ angular.module('starter.controllers', [])
           $.jStorage.set('token', param.data.success.token);
           $.jStorage.set('id', param.data.success.id);
           console.log(param);
-          $rootScope.redirectedtofilladdress = true;
+        //  $rootScope.redirectedtofilladdress = true;
           insertaddress();
           
         }).catch(function (fallback) {
@@ -366,10 +366,13 @@ angular.module('starter.controllers', [])
       $scope.errors = {};
       $scope.errorsforaddress = {};
       console.log("registered function called !");
-      if (!$rootScope.showheader)
+      if (!$.jStorage.get('token'))
         $scope.callfunction();
       else
+      {
+        console.log("i am in else");
         insertaddress();
+      }
 
 
 
