@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.sanjaresolutions.hni" version="0.0.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.sanjaresolutions.hni" version="0.0.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>HNI</name>
     <description>Just Download HNI App, Register &amp; Explore a whole new world of Classic Perfumes.</description>
     <author email="contact@sanjaresolutions.com" href="http://sanjaresolutions.com">Sanajr e Solutions</author>
