@@ -773,8 +773,8 @@ textarea.materialize-textarea.validate+label {
   z-index: 1;
 }
 
-.pd35 {
-  padding: 35px !important
+.pdtb35 {
+  padding: 35px 0 !important;
 }
 
 .logdiv {
